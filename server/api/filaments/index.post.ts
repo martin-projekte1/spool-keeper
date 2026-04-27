@@ -33,7 +33,6 @@ export default defineEventHandler(async (event) => {
     initialWeightG: body.initialWeightG ?? 1000,
     remainingWeightG: body.remainingWeightG ?? body.initialWeightG ?? 1000,
     status: 'sealed',
-    notes: body.notes ?? null,
   })
 
   return newFilament

@@ -37,7 +37,6 @@ const filaments = computed(() => {
         f.material?.name,
         f.color?.name,
         f.manufacturer?.name,
-        f.notes,
         ...(f.features?.map((ft: { name: string }) => ft.name) ?? []),
       ].filter(Boolean).join(' ').toLowerCase()
       const matchSearch = !search.value || searchTarget.includes(search.value.toLowerCase())

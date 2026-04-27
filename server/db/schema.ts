@@ -58,5 +58,4 @@ export const spools = sqliteTable('spools', {
   status: text('status', { enum: ['sealed', 'open', 'active'] }).default('sealed'),
   dryingStartedAt: text('drying_started_at'),
   dryingFinishedAt: text('drying_finished_at'),
-  notes: text('notes'),
 })

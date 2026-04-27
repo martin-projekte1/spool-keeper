@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
     remainingWeightG?: number
     status?: 'sealed' | 'open' | 'active'
     purchasedAt?: string | null
-    notes?: string | null
   }>(event)
 
   if (!body?.filamentId) throw createError({ statusCode: 400, statusMessage: 'filamentId is required' })
@@ -19,8 +18,7 @@ export default defineEventHandler(async (event) => {
     initialWeightG: body.initialWeightG ?? 1000,
     remainingWeightG: body.remainingWeightG ?? body.initialWeightG ?? 1000,
     status: body.status ?? 'sealed',
-    purchasedAt: body.purchasedAt ?? null,
-    notes: body.notes ?? null,
+    purchasedAt: body.purchasedAt ?? null
   }).returning()
 
   return result

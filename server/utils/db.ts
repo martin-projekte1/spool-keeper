@@ -61,8 +61,7 @@ sqlite.exec(`
     remaining_weight_g REAL,
     status TEXT DEFAULT 'sealed',
     drying_started_at TEXT,
-    drying_finished_at TEXT,
-    notes TEXT
+    drying_finished_at TEXT
   );
 `)
 

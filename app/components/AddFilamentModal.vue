@@ -21,7 +21,6 @@ const state = reactive({
   featureIds: [] as number[],
   initialWeightG: 1000,
   status: 'sealed',
-  notes: '',
 })
 
 const loading = ref(false)
@@ -38,7 +37,7 @@ function reset() {
     name: '', materialId: undefined, manufacturerId: undefined,
     colorId: undefined, diameter: 1.75,
     printTempMin: 190, printTempMax: 220,
-    featureIds: [], initialWeightG: 1000, status: 'sealed', notes: '',
+    featureIds: [], initialWeightG: 1000, status: 'sealed',
   })
   ean.value = ''
 }
@@ -160,10 +159,6 @@ async function saveFilament() {
             />
           </UFormField>
         </div>
-
-        <UFormField label="Notes (Optional)">
-          <UInput v-model="state.notes" class="w-full" placeholder="e.g. Needs drying before use" />
-        </UFormField>
 
         <UButton :loading="loading" block icon="i-lucide-save" type="submit">
           Save Filament & Spool

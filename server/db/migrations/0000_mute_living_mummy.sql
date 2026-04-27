@@ -30,6 +30,5 @@ CREATE TABLE `spools` (
 	`status` text DEFAULT 'new',
 	`drying_started_at` text,
 	`drying_finished_at` text,
-	`notes` text,
 	FOREIGN KEY (`filament_id`) REFERENCES `filaments`(`id`) ON UPDATE no action ON DELETE no action
 );
