@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 const materialFilter = ref<number | null>(null)
 const manufacturerFilter = ref<string | null>(null)
-const featureFilter = ref<number[]>([])
+const featureFilter = ref<string[]>([])
 const search = ref('')
 
 const { data: filamentsRaw, refresh } = await useFetch('/api/filaments')
@@ -23,7 +23,7 @@ const manufacturerOptions = computed(() => {
 
 const featureOptions = computed(() => {
   if (!featuresData.value) return []
-  return featuresData.value.map(f => ({ label: f.name, value: f.id }))
+  return featuresData.value.map(f => ({ label: f.name, value: String(f.id) }))
 })
 
 const filaments = computed(() => {
@@ -32,9 +32,17 @@ const filaments = computed(() => {
   return filamentsRaw.value
     .filter(f => {
       const matchMaterial = !materialFilter.value || f.materialId === materialFilter.value
-      const matchSearch = !search.value || f.name.toLowerCase().includes(search.value.toLowerCase())
+      const searchTarget = [
+        f.name,
+        f.material?.name,
+        f.color?.name,
+        f.manufacturer?.name,
+        f.notes,
+        ...(f.features?.map((ft: { name: string }) => ft.name) ?? []),
+      ].filter(Boolean).join(' ').toLowerCase()
+      const matchSearch = !search.value || searchTarget.includes(search.value.toLowerCase())
       const matchManufacturer = !manufacturerFilter.value || f.manufacturer?.name === manufacturerFilter.value
-      const filamentFeatureIds = f.features?.map((ft: { id: number }) => ft.id) ?? []
+      const filamentFeatureIds = f.features?.map((ft: { id: number }) => String(ft.id)) ?? []
       const matchFeatures = featureFilter.value.length === 0 || featureFilter.value.every(fid => filamentFeatureIds.includes(fid))
       return matchMaterial && matchSearch && matchManufacturer && matchFeatures
     })
@@ -74,8 +82,8 @@ const filaments = computed(() => {
         status: mappedStatus.label,
         statusColor: mappedStatus.color,
         spoolCount: f.spools?.length ?? 0,
-        totalWeightG: f.spools?.reduce((s: number, sp: { initialWeightG?: number }) => s + (sp.initialWeightG ?? 0), 0) ?? 0,
-        remainingWeightG: f.spools?.reduce((s: number, sp: { remainingWeightG?: number }) => s + (sp.remainingWeightG ?? 0), 0) ?? 0,
+        totalWeightG: f.spools?.reduce((s, sp) => s + (sp.initialWeightG ?? 0), 0) ?? 0,
+        remainingWeightG: f.spools?.reduce((s, sp) => s + (sp.remainingWeightG ?? 0), 0) ?? 0,
       }
     })
 })

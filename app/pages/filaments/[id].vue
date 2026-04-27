@@ -106,7 +106,6 @@ async function updateFilament() {
       ...updated,
       features: (featuresData.value ?? []).filter(f => formState.featureIds.includes(f.id)),
       spools: filament.value.spools,
-      manufacturer: filament.value.manufacturer,
       material: filament.value.material,
       color: filament.value.color,
     }
