@@ -68,6 +68,7 @@ export async function seedForUser(userId: string) {
 
   await db.insert(filamentFeatures).values([
     { filamentId: fil1.id, featureId: hf.id },
+    { filamentId: fil1.id, featureId: plus.id },
     { filamentId: fil2.id, featureId: plus.id },
     { filamentId: fil3.id, featureId: matte.id },
     { filamentId: fil4.id, featureId: matte.id },
