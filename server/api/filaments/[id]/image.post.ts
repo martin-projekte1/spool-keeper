@@ -1,5 +1,4 @@
 import { mkdir, writeFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import sharp from 'sharp'
 import { filaments } from '#server/db/schema'
 import { and, eq } from 'drizzle-orm'
@@ -14,18 +13,26 @@ export default defineEventHandler(async (event) => {
   const file = form.find(f => f.name === 'image')
   if (!file?.data) throw createError({ statusCode: 400, message: 'No image field' })
 
+  // Delete previous uploaded image before writing the new one
+  const [current] = await db.select({ imageUrl: filaments.imageUrl })
+    .from(filaments)
+    .where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
+    .limit(1)
+
+  await deleteUploadedImage(current?.imageUrl)
+
   const webpBuffer = await sharp(file.data)
     .resize(800, 800, { fit: 'inside', withoutEnlargement: true })
     .webp({ quality: 80 })
     .toBuffer()
 
-  const filename = `filament-${id}-${Date.now()}.webp`
-  const dir = join(process.cwd(), 'public', 'images', 'filaments')
-
+  const dir = getUploadDir()
   await mkdir(dir, { recursive: true })
-  await writeFile(join(dir, filename), webpBuffer)
 
-  const imageUrl = `/images/filaments/${filename}`
+  const filename = `filament-${id}-${Date.now()}.webp`
+  await writeFile(`${dir}/${filename}`, webpBuffer)
+
+  const imageUrl = `/uploads/filaments/${filename}`
 
   const [updated] = await db.update(filaments)
     .set({ imageUrl })

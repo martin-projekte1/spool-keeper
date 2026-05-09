@@ -56,8 +56,23 @@ useRealtimeUpdates((event, value) => {
 
 const saving = ref(false)
 const savingSpools = ref(false)
+const deleting = ref(false)
+const showDeleteConfirm = ref(false)
 const scannerOpen = ref(false)
 const spoolsEditing = ref(false)
+
+async function deleteFilament() {
+  deleting.value = true
+  try {
+    await $fetch(`/api/filaments/${route.params.id}`, { method: 'DELETE' })
+    await navigateTo('/')
+  } catch {
+    toast.add({ title: 'Error deleting filament', color: 'error' })
+  } finally {
+    deleting.value = false
+    showDeleteConfirm.value = false
+  }
+}
 
 const statusOptions = [
   { label: 'Sealed', value: 'sealed' as const },
@@ -303,13 +318,10 @@ async function saveSpools() {
 
           <UFormField label="Image">
             <div class="space-y-2">
-              <NuxtImg
+              <img
                   v-if="formState.imageUrl"
                   :src="formState.imageUrl"
                   class="size-20 rounded object-cover border border-default"
-                  format="webp"
-                  height="80"
-                  width="80"
               />
               <label class="block">
                 <UButton
@@ -329,6 +341,18 @@ async function saveSpools() {
             Save Changes
           </UButton>
         </form>
+
+        <div class="mt-4 pt-4 border-t border-default flex justify-end gap-2">
+          <template v-if="showDeleteConfirm">
+            <UButton color="neutral" variant="ghost" @click="showDeleteConfirm = false">Cancel</UButton>
+            <UButton :loading="deleting" color="error" icon="i-lucide-trash-2" variant="solid" @click="deleteFilament">
+              Confirm Delete
+            </UButton>
+          </template>
+          <UButton v-else color="error" icon="i-lucide-trash-2" variant="ghost" @click="showDeleteConfirm = true">
+            Delete Filament
+          </UButton>
+        </div>
       </UCard>
 
       <!-- Right: Spools -->
