@@ -7,11 +7,10 @@ Built with **Nuxt 4**, **Nuxt UI**, **Tailwind CSS v4**, and **SQLite**.
 
 ## 💡 Features
 
-- **Filament Management** — Search, filter, and sort by material, manufacturer, and color.
-- **Level Tracking** — Real-time tracking of remaining weight per spool.
-- **QR Label Printing** — Generate and print QR labels for physical spools.
-- **PWA Support** — Fully installable on mobile and desktop for scan-workflows.
-- **Type-Safe API** — Built with Drizzle ORM and Nitro server routes.
+- **Filament Management:** Search, filter, and sort by material, manufacturer, and color.
+- **Level Tracking:** Real-time tracking of remaining weight per spool.
+- **QR Label Printing:** Generate and print QR labels for physical spools.
+- **PWA Support:** Fully installable on mobile and desktop for scan-workflows.
 
 ## 🏗️ Tech Stack
 
