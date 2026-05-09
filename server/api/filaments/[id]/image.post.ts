@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
   const file = form.find(f => f.name === 'image')
   if (!file?.data) throw createError({ statusCode: 400, message: 'No image field' })
 
-  // Delete previous uploaded image before writing the new one
   const [current] = await db.select({ imageUrl: filaments.imageUrl })
     .from(filaments)
     .where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
@@ -32,7 +31,7 @@ export default defineEventHandler(async (event) => {
   const filename = `filament-${id}-${Date.now()}.webp`
   await writeFile(`${dir}/${filename}`, webpBuffer)
 
-  const imageUrl = `/uploads/filaments/${filename}`
+  const imageUrl = `/images/uploads/${filename}`
 
   const [updated] = await db.update(filaments)
     .set({ imageUrl })

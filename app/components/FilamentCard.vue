@@ -24,10 +24,14 @@ defineProps<{
   <UCard>
     <template #header>
       <div class="flex items-center gap-3">
-        <img
+        <NuxtImg
             :alt="imageAlt"
             :src="imageUrl"
             class="size-14 rounded object-cover"
+            format="webp"
+            height="56"
+            quality="80"
+            width="56"
         />
         <div class="flex-1 min-w-0">
           <p class="font-semibold">{{ name }}</p>

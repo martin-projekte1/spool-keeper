@@ -25,12 +25,20 @@ const state = reactive({
 
 const loading = ref(false)
 const ean = ref('')
+const imageFile = ref<File | null>(null)
+const imagePreviewUrl = computed(() =>
+  imageFile.value ? URL.createObjectURL(imageFile.value) : null
+)
 const scannerOpen = ref(false)
 
 const selectedColorHex = computed(() => {
   if (!state.colorId || !colorsData.value) return null
   return colorsData.value.find(c => c.id === state.colorId)?.hex ?? null
 })
+
+function onImageChange(event: Event) {
+  imageFile.value = (event.target as HTMLInputElement).files?.[0] ?? null
+}
 
 function reset() {
   Object.assign(state, {
@@ -40,15 +48,23 @@ function reset() {
     featureIds: [], initialWeightG: 1000, status: 'sealed',
   })
   ean.value = ''
+  imageFile.value = null
 }
 
 async function saveFilament() {
   loading.value = true
   try {
-    await $fetch('/api/filaments', {
+    const newFilament = await $fetch<{ id: number }>('/api/filaments', {
       method: 'POST',
       body: { ...state, ean: ean.value || null },
     })
+
+    if (imageFile.value && newFilament?.id) {
+      const form = new FormData()
+      form.append('image', imageFile.value)
+      await $fetch(`/api/filaments/${newFilament.id}/image`, { method: 'POST', body: form })
+    }
+
     reset()
     emit('created')
     emit('update:modelValue', false)
@@ -127,7 +143,7 @@ async function saveFilament() {
           </div>
         </UFormField>
 
-        <div class="grid grid-cols-3 gap-4 border-t border-default pt-4">
+        <div class="border-t border-default pt-4 space-y-4">
           <UFormField label="Diameter">
             <USelect
                 v-model="state.diameter"
@@ -135,11 +151,33 @@ async function saveFilament() {
                 class="w-full"
             />
           </UFormField>
-          <UFormField label="Min Temp (°C)">
-            <UInput v-model="state.printTempMin" max="350" min="150" required type="number" />
-          </UFormField>
-          <UFormField label="Max Temp (°C)">
-            <UInput v-model="state.printTempMax" max="350" min="150" required type="number" />
+
+          <div class="grid grid-cols-2 gap-4">
+            <UFormField label="Min Temp (°C)">
+              <UInput v-model="state.printTempMin" max="350" min="150" required type="number" />
+            </UFormField>
+            <UFormField label="Max Temp (°C)">
+              <UInput v-model="state.printTempMax" max="350" min="150" required type="number" />
+            </UFormField>
+          </div>
+
+          <UFormField label="Image">
+            <div class="space-y-2">
+              <NuxtImg
+                  v-if="imagePreviewUrl"
+                  :src="imagePreviewUrl"
+                  class="size-20 rounded object-cover border border-default"
+                  format="webp"
+                  height="80"
+                  width="80"
+              />
+              <label class="block">
+                <UButton as="span" color="neutral" icon="i-lucide-upload" size="xs" variant="outline">
+                  {{ imageFile ? imageFile.name : 'Upload Image' }}
+                </UButton>
+                <input accept="image/*" class="hidden" type="file" @change="onImageChange" />
+              </label>
+            </div>
           </UFormField>
         </div>
 

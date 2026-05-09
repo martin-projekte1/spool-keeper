@@ -287,14 +287,14 @@ async function saveSpools() {
             </div>
           </UFormField>
 
-          <div class="grid grid-cols-3 gap-4">
-            <UFormField label="Diameter">
-              <USelect
-                  v-model="formState.diameter"
-                  :items="[{ label: '1.75 mm', value: 1.75 }, { label: '2.85 mm', value: 2.85 }]"
-                  class="w-full"
-              />
-            </UFormField>
+          <UFormField label="Diameter">
+            <USelect
+                v-model="formState.diameter"
+                :items="[{ label: '1.75 mm', value: 1.75 }, { label: '2.85 mm', value: 2.85 }]"
+                class="w-full"
+            />
+          </UFormField>
+          <div class="grid grid-cols-2 gap-4">
             <UFormField label="Min °C">
               <UInput v-model="formState.printTempMin" class="w-full" placeholder="Min" type="number" />
             </UFormField>
@@ -318,10 +318,13 @@ async function saveSpools() {
 
           <UFormField label="Image">
             <div class="space-y-2">
-              <img
+              <NuxtImg
                   v-if="formState.imageUrl"
                   :src="formState.imageUrl"
                   class="size-20 rounded object-cover border border-default"
+                  format="webp"
+                  height="80"
+                  width="80"
               />
               <label class="block">
                 <UButton
