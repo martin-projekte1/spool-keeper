@@ -1,5 +1,5 @@
 import { and, count, eq, inArray } from 'drizzle-orm'
-import { colors, featuresTable, filaments, manufacturers, materials } from '#server/db/schema'
+import { colors, featuresTable, filamentFeatures, filaments, manufacturers, materials } from '#server/db/schema'
 
 function normalizeId(input: unknown, fieldName: string): number {
   const id = Number(input)
@@ -87,5 +87,39 @@ export async function validateOwnedFilamentReferences(
     manufacturerId,
     colorId,
     featureIds: normalizedFeatureIds,
+  }
+}
+
+export async function assertNoFilamentUsage(
+  userId: string,
+  id: number,
+  kind: 'material' | 'manufacturer' | 'color' | 'feature',
+) {
+  let usedBy: { name: string }[] = []
+
+  if (kind === 'feature') {
+    usedBy = await db
+      .select({ name: filaments.name })
+      .from(filaments)
+      .innerJoin(filamentFeatures, eq(filaments.id, filamentFeatures.filamentId))
+      .where(and(eq(filamentFeatures.featureId, id), eq(filaments.userId, userId)))
+  } else {
+    const column =
+      kind === 'material' ? filaments.materialId
+        : kind === 'manufacturer' ? filaments.manufacturerId
+          : filaments.colorId
+
+    usedBy = await db
+      .select({ name: filaments.name })
+      .from(filaments)
+      .where(and(eq(column, id), eq(filaments.userId, userId)))
+  }
+
+  if (usedBy.length > 0) {
+    const names = usedBy.map(f => f.name).join(', ')
+    throw createError({
+      statusCode: 409,
+      statusMessage: `Cannot delete ${kind} because it is used by these filaments: ${names}. Please edit them first.`,
+    })
   }
 }

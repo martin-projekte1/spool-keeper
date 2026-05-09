@@ -4,7 +4,7 @@ import { SPOOL_STATUS_OPTIONS } from '~/types/filament'
 
 const props = defineProps<{
   filamentId: number
-  spools: SpoolRecord[]
+  spools: Spool[]
 }>()
 
 const emit = defineEmits<{

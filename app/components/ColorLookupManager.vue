@@ -5,6 +5,7 @@ const { data: colors, refresh } = await useFetch<ColorLookupItem[]>('/api/colors
 
 const newColor = reactive({ name: '', hex: '#111111' })
 const editing = ref<ColorLookupItem | null>(null)
+const toast = useToast()
 
 const columns = [
   { accessorKey: 'name', header: 'Name' },
@@ -31,8 +32,16 @@ async function saveColor() {
 }
 
 async function deleteColor(id: number) {
-  await $fetch(`/api/colors/${id}`, { method: 'DELETE' })
-  await refresh()
+  try {
+    await $fetch(`/api/colors/${id}`, { method: 'DELETE' })
+    await refresh()
+  } catch (err: any) {
+    toast.add({
+      title: 'Deletion failed',
+      description: err.data?.statusMessage || err.message,
+      color: 'error',
+    })
+  }
 }
 </script>
 

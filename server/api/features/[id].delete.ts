@@ -5,6 +5,8 @@ export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
   const id = Number(getRouterParam(event, 'id'))
 
+  await assertNoFilamentUsage(userId, id, 'feature')
+
   const [result] = await db
     .delete(featuresTable)
     .where(and(eq(featuresTable.id, id), eq(featuresTable.userId, userId)))

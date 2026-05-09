@@ -12,6 +12,7 @@ const { data: items, refresh } = await useFetch<LookupItem[]>(() => `/api/${prop
 
 const newName = ref('')
 const editing = ref<LookupItem | null>(null)
+const toast = useToast()
 
 const columns = [
   { accessorKey: 'name', header: 'Name' },
@@ -33,8 +34,16 @@ async function saveItem() {
 }
 
 async function deleteItem(id: number) {
-  await $fetch(`/api/${props.resource}/${id}`, { method: 'DELETE' })
-  await refresh()
+  try {
+    await $fetch(`/api/${props.resource}/${id}`, { method: 'DELETE' })
+    await refresh()
+  } catch (err: any) {
+    toast.add({
+      title: 'Deletion failed',
+      description: err.data?.statusMessage || err.message,
+      color: 'error',
+    })
+  }
 }
 </script>
 
