@@ -44,12 +44,12 @@ const { data: featuresData } = await useFetch('/api/features')
 useRealtimeUpdates((event, value) => {
   if (event === 'data:changed') refresh()
   if (event === 'qr:scanned' && value && /^\d+$/.test(value)) {
-    toast.add({
+    const t = toast.add({
       title: 'QR Code Scanned',
       description: 'Another device scanned a spool. Tap to open it.',
       icon: 'i-lucide-scan-qr-code',
       duration: 8000,
-      onClick: () => navigateTo(`/filaments/${value}`),
+      onClick: () => { toast.remove(t.id); navigateTo(`/filaments/${value}`) },
     })
   }
 })
