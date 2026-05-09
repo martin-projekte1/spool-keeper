@@ -23,5 +23,5 @@ Built with **Nuxt 4**, **Nuxt UI**, **Tailwind CSS v4**, and **SQLite**.
 
 ```bash
 pnpm install
-pnpm drizzle-kit push
 pnpm dev
+```
