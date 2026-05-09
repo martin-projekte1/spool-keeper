@@ -25,6 +25,11 @@ export default defineOAuthGoogleEventHandler({
   },
   onError(event, error) {
     console.error('OAuth error:', error)
-    return sendRedirect(event, '/login?error=1')
+    // TEMPORARY: Show error message in browser for debugging production 500
+    throw createError({
+      statusCode: 500,
+      statusMessage: `OAuth Error: ${error.message || 'Unknown error'}`,
+      data: error
+    })
   },
 })
