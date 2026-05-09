@@ -1,5 +1,3 @@
-import { manufacturers, filaments, spools, materials, featuresTable, colors } from '#server/db/schema'
-import { eq } from 'drizzle-orm'
 import { clearUserData } from '#server/utils/ownership'
 
 export default defineEventHandler(async (event) => {
