@@ -121,4 +121,17 @@ export default defineNuxtConfig({
       websocket: true,
     },
   },
+
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_SITE_URL || 'https://www.spoolkeeper.site',
+    },
+    session: {
+      name: 'spool-keeper-session',
+      cookie: {
+        sameSite: 'lax',
+        secure: true,
+      }
+    }
+  }
 })
