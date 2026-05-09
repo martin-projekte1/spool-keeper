@@ -3,7 +3,7 @@ import { clearUserData } from './ownership'
 import { db } from './db'
 
 export async function seedForUser(userId: string) {
-  await db.transaction(async (tx) => {
+  db.transaction((tx) => {
     clearUserData(tx, userId)
 
     const elegoo = tx.insert(manufacturers).values({ userId, name: 'Elegoo' }).returning().get()
