@@ -54,12 +54,12 @@ async function deleteAccount() {
           </div>
         </div>
 
-        <UFormField label="Username">
-          <UInput :model-value="user?.name" disabled icon="i-lucide-user"/>
+        <UFormField label="Username" class="w-full">
+          <UInput :model-value="user?.name" disabled icon="i-lucide-user" class="w-full"/>
         </UFormField>
 
-        <UFormField label="Email">
-          <UInput :model-value="user?.email" disabled icon="i-lucide-mail" type="email"/>
+        <UFormField label="Email" class="w-full">
+          <UInput :model-value="user?.email" disabled icon="i-lucide-mail" type="email" class="w-full"/>
         </UFormField>
 
         <div class="pt-2">
