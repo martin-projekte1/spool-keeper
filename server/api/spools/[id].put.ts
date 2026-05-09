@@ -3,7 +3,7 @@ import { eq, and } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
-  const id = Number(getRouterParam(event, 'id'))
+  const id = normalizeRouteId(getRouterParam(event, 'id'))
   const body = await readBody<{
     status?: 'sealed' | 'open' | 'active'
     remainingWeightG?: number

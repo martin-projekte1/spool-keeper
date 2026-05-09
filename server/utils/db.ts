@@ -8,6 +8,7 @@ mkdirSync(dbPath.replace(/\/[^/]+$/, ''), { recursive: true })
 
 const sqlite = new Database(dbPath)
 sqlite.pragma('journal_mode = WAL')
+sqlite.pragma('foreign_keys = ON')
 
 // Ensure schema is up to date — idempotent, safe to run on every startup
 sqlite.exec(`

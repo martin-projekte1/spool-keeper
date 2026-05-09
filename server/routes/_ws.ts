@@ -1,4 +1,5 @@
 import { registerPeer, unregisterPeer, forwardToPeers } from '../utils/ws'
+import { consumeWsAuthToken } from '../utils/ws-auth'
 
 export default defineWebSocketHandler({
   open(_peer) {},
@@ -7,8 +8,13 @@ export default defineWebSocketHandler({
     let data: Record<string, unknown>
     try { data = message.json() } catch { return }
 
-    if (data.type === 'auth' && typeof data.userId === 'string') {
-      registerPeer(peer, data.userId)
+    if (data.type === 'auth' && typeof data.token === 'string') {
+      const userId = consumeWsAuthToken(data.token)
+      if (!userId) {
+        peer.close()
+        return
+      }
+      registerPeer(peer, userId)
       return
     }
 

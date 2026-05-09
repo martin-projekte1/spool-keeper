@@ -3,34 +3,45 @@ import { and, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
-  const id = Number(getRouterParam(event, 'id'))
+  const id = normalizeRouteId(getRouterParam(event, 'id'))
   const body = await readBody(event)
 
-  const [updated] = await db.update(filaments)
-    .set({
-      name: body.name,
-      materialId: body.materialId ?? null,
-      manufacturerId: body.manufacturerId ?? null,
-      colorId: body.colorId ?? null,
-      diameter: body.diameter,
-      printTempMin: body.printTempMin,
-      printTempMax: body.printTempMax,
-      imageUrl: body.imageUrl ?? null,
-      ean: body.ean ?? null,
-    })
-    .where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
-    .returning()
+  if (!body?.name?.trim()) throw createError({ statusCode: 400, statusMessage: 'Name is required' })
 
-  if (!updated) throw createError({ statusCode: 404, message: 'Filament not found' })
+  const refs = await validateOwnedFilamentReferences(userId, {
+    materialId: body.materialId,
+    manufacturerId: body.manufacturerId,
+    colorId: body.colorId,
+    featureIds: body.featureIds,
+  })
 
-  // Replace feature associations
-  await db.delete(filamentFeatures).where(eq(filamentFeatures.filamentId, id))
-  const featureIds: number[] = Array.isArray(body.featureIds) ? body.featureIds : []
-  if (featureIds.length) {
-    await db.insert(filamentFeatures).values(
-      featureIds.map(fid => ({ filamentId: id, featureId: fid }))
-    )
-  }
+  const updated = await db.transaction(async (tx) => {
+    const [updatedFilament] = await tx.update(filaments)
+      .set({
+        name: body.name.trim(),
+        materialId: refs.materialId,
+        manufacturerId: refs.manufacturerId,
+        colorId: refs.colorId,
+        diameter: body.diameter,
+        printTempMin: body.printTempMin,
+        printTempMax: body.printTempMax,
+        imageUrl: body.imageUrl ?? null,
+        ean: body.ean ?? null,
+      })
+      .where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
+      .returning()
+
+    if (!updatedFilament) throw createError({ statusCode: 404, message: 'Filament not found' })
+
+    await tx.delete(filamentFeatures).where(eq(filamentFeatures.filamentId, id))
+    if (refs.featureIds.length) {
+      await tx.insert(filamentFeatures).values(
+        refs.featureIds.map(featureId => ({ filamentId: id, featureId })),
+      )
+    }
+
+    return updatedFilament
+  })
 
   notifyUser(userId, 'data:changed')
   return updated

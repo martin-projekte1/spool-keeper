@@ -10,11 +10,11 @@ export default defineEventHandler(async (event) => {
     purchasedAt?: string | null
   }>(event)
 
-  if (!body?.filamentId) throw createError({ statusCode: 400, statusMessage: 'filamentId is required' })
+  const filamentId = await assertOwnedFilamentId(userId, body?.filamentId)
 
   const [result] = await db.insert(spools).values({
     userId,
-    filamentId: body.filamentId,
+    filamentId,
     initialWeightG: body.initialWeightG ?? 1000,
     remainingWeightG: body.remainingWeightG ?? body.initialWeightG ?? 1000,
     status: body.status ?? 'sealed',

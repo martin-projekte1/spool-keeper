@@ -14,7 +14,7 @@ async function logout() {
 async function resetData() {
   resetting.value = true
   try {
-    await $fetch('/api/seed', {method: 'GET'})
+    await $fetch('/api/seed', {method: 'POST'})
     await navigateTo('/')
   } finally {
     resetting.value = false

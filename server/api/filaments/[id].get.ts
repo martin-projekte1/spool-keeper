@@ -3,14 +3,14 @@ import { and, eq } from 'drizzle-orm'
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
-  const id = Number(getRouterParam(event, 'id'))
+  const id = normalizeRouteId(getRouterParam(event, 'id'))
 
   const [row] = await db
     .select()
     .from(filaments)
-    .leftJoin(manufacturers, eq(filaments.manufacturerId, manufacturers.id))
-    .leftJoin(materials, eq(filaments.materialId, materials.id))
-    .leftJoin(colors, eq(filaments.colorId, colors.id))
+    .leftJoin(manufacturers, and(eq(filaments.manufacturerId, manufacturers.id), eq(manufacturers.userId, userId)))
+    .leftJoin(materials, and(eq(filaments.materialId, materials.id), eq(materials.userId, userId)))
+    .leftJoin(colors, and(eq(filaments.colorId, colors.id), eq(colors.userId, userId)))
     .where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
     .limit(1)
 
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
     db.select({ feature: featuresTable })
       .from(filamentFeatures)
       .innerJoin(featuresTable, eq(filamentFeatures.featureId, featuresTable.id))
-      .where(eq(filamentFeatures.filamentId, id)),
+      .where(and(eq(filamentFeatures.filamentId, id), eq(featuresTable.userId, userId))),
   ])
 
   return {

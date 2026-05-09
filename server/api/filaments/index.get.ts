@@ -7,9 +7,9 @@ export default defineEventHandler(async (event) => {
   const rows = await db
     .select()
     .from(filaments)
-    .leftJoin(manufacturers, eq(filaments.manufacturerId, manufacturers.id))
-    .leftJoin(materials, eq(filaments.materialId, materials.id))
-    .leftJoin(colors, eq(filaments.colorId, colors.id))
+    .leftJoin(manufacturers, and(eq(filaments.manufacturerId, manufacturers.id), eq(manufacturers.userId, userId)))
+    .leftJoin(materials, and(eq(filaments.materialId, materials.id), eq(materials.userId, userId)))
+    .leftJoin(colors, and(eq(filaments.colorId, colors.id), eq(colors.userId, userId)))
     .where(eq(filaments.userId, userId))
 
   if (rows.length === 0) return []
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     db.select({ filamentId: filamentFeatures.filamentId, feature: featuresTable })
       .from(filamentFeatures)
       .innerJoin(featuresTable, eq(filamentFeatures.featureId, featuresTable.id))
-      .where(inArray(filamentFeatures.filamentId, filamentIds)),
+      .where(and(inArray(filamentFeatures.filamentId, filamentIds), eq(featuresTable.userId, userId))),
   ])
 
   const spoolsByFilament = Map.groupBy(allSpools, s => s.filamentId!)
