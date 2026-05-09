@@ -3,8 +3,11 @@ type Handler = (event: string, value?: string) => void
 export function useRealtimeUpdates(onEvent: Handler) {
   const { user } = useUserSession()
   let ws: WebSocket | null = null
+  let active = true
+  let reconnectTimeout: ReturnType<typeof setTimeout> | null = null
 
   function connect() {
+    if (!active) return
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:'
     const url = `${protocol}//${window.location.host}/_ws`
     ws = new WebSocket(url)
@@ -21,7 +24,7 @@ export function useRealtimeUpdates(onEvent: Handler) {
     }
 
     ws.onclose = () => {
-      setTimeout(connect, 3_000)
+      if (active) reconnectTimeout = setTimeout(connect, 3_000)
     }
   }
 
@@ -30,7 +33,11 @@ export function useRealtimeUpdates(onEvent: Handler) {
   }
 
   onMounted(connect)
-  onUnmounted(() => ws?.close())
+  onUnmounted(() => {
+    active = false
+    if (reconnectTimeout) clearTimeout(reconnectTimeout)
+    ws?.close()
+  })
 
   return { send }
 }

@@ -122,7 +122,7 @@ async function updateFilament() {
       material: filament.value.material,
       color: filament.value.color,
     }
-    toast.add({ title: 'Filament updated', icon: 'i-lucide-check-circle', color: 'success' })
+    toast.add({ title: 'Filament updated', icon: 'i-lucide-check-circle' })
   } catch (err) {
     console.error(err)
     toast.add({ title: 'Error updating filament', color: 'error' })
@@ -145,7 +145,7 @@ async function uploadImage(event: Event) {
     })
     formState.imageUrl = result.imageUrl
     if (filament.value) filament.value.imageUrl = result.imageUrl
-    toast.add({ title: 'Image updated', icon: 'i-lucide-check-circle', color: 'success' })
+    toast.add({ title: 'Image updated', icon: 'i-lucide-check-circle' })
   } catch (err) {
     console.error(err)
     toast.add({ title: 'Image upload failed', color: 'error' })
@@ -192,7 +192,7 @@ async function saveSpools() {
       }
     }))
     await refresh()
-    toast.add({ title: 'Spools saved', icon: 'i-lucide-check-circle', color: 'success' })
+    toast.add({ title: 'Spools saved', icon: 'i-lucide-check-circle' })
   } catch (err) {
     console.error(err)
     toast.add({ title: 'Error saving spools', color: 'error' })
