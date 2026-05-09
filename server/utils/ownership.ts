@@ -97,12 +97,12 @@ export async function assertNoFilamentUsage(
 ) {
   const usedBy = kind === 'feature'
     ? await db
-      .select({ name: filaments.name })
+      .select({ id: filaments.id, name: filaments.name })
       .from(filaments)
       .innerJoin(filamentFeatures, eq(filaments.id, filamentFeatures.filamentId))
       .where(and(eq(filamentFeatures.featureId, id), eq(filaments.userId, userId)))
     : await db
-      .select({ name: filaments.name })
+      .select({ id: filaments.id, name: filaments.name })
       .from(filaments)
       .where(and(eq(
         kind === 'material' ? filaments.materialId
@@ -112,10 +112,10 @@ export async function assertNoFilamentUsage(
       ), eq(filaments.userId, userId)))
 
   if (usedBy.length > 0) {
-    const names = usedBy.map(f => f.name).join(', ')
     throw createError({
       statusCode: 409,
-      statusMessage: `Cannot delete ${kind} because it is used by these filaments: ${names}. Please edit them first.`,
+      statusMessage: `Cannot delete ${kind} because it is used by one or more filaments:`,
+      data: { filaments: usedBy }
     })
   }
 }

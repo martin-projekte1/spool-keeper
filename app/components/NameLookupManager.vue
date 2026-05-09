@@ -38,10 +38,19 @@ async function deleteItem(id: number) {
     await $fetch(`/api/${props.resource}/${id}`, { method: 'DELETE' })
     await refresh()
   } catch (err: any) {
+    const blockingFilaments = err.data?.data?.filaments as { id: number, name: string }[] | undefined
+    
     toast.add({
       title: 'Deletion failed',
       description: err.data?.statusMessage || err.message,
       color: 'error',
+      actions: blockingFilaments?.slice(0, 4).map(f => ({
+        label: f.name,
+        variant: 'outline',
+        color: 'neutral',
+        class: 'max-w-[140px] truncate block',
+        onClick: async () => { await navigateTo(`/filaments/${f.id}`) }
+      }))
     })
   }
 }

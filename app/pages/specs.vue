@@ -13,19 +13,20 @@ const tabs = [
 
     <UTabs :items="tabs" color="neutral" variant="link">
 
-      <template #content="{ item }">
-        <div v-if="item.slot === 'manufacturers'">
-          <NameLookupManager resource="manufacturers" input-placeholder="New manufacturer name…" />
-        </div>
-        <div v-else-if="item.slot === 'materials'">
-          <NameLookupManager resource="materials" input-placeholder="New material name…" />
-        </div>
-        <div v-else-if="item.slot === 'features'">
-          <NameLookupManager resource="features" input-placeholder="New feature name…" />
-        </div>
-        <div v-else-if="item.slot === 'colors'">
-          <ColorLookupManager />
-        </div>
+      <template #manufacturers>
+        <NameLookupManager resource="manufacturers" input-placeholder="New manufacturer name…" />
+      </template>
+
+      <template #materials>
+        <NameLookupManager resource="materials" input-placeholder="New material name…" />
+      </template>
+
+      <template #features>
+        <NameLookupManager resource="features" input-placeholder="New feature name…" />
+      </template>
+
+      <template #colors>
+        <ColorLookupManager />
       </template>
 
     </UTabs>
