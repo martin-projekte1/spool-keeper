@@ -58,7 +58,7 @@ async function deleteItem(id: number) {
       <UTable :columns="columns" :data="items ?? []">
         <template #name-cell="{ row }">
           <UInput
-            v-if="editing?.id === row.original.id"
+            v-if="editing && editing.id === row.original.id"
             v-model="editing.name"
             class="w-full"
             @keydown.enter.prevent="saveItem"
@@ -69,7 +69,7 @@ async function deleteItem(id: number) {
 
         <template #actions-cell="{ row }">
           <div class="flex gap-1 justify-end">
-            <template v-if="editing?.id === row.original.id">
+            <template v-if="editing && editing.id === row.original.id">
               <UButton color="primary" icon="i-lucide-check" size="xs" variant="ghost" @click="saveItem" />
               <UButton color="neutral" icon="i-lucide-x" size="xs" variant="ghost" @click="editing = null" />
             </template>

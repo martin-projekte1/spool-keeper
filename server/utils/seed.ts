@@ -1,14 +1,10 @@
 import { manufacturers, filaments, spools, materials, featuresTable, colors, filamentFeatures } from '#server/db/schema'
 import { eq } from 'drizzle-orm'
+import { clearUserData } from './ownership'
 
 export async function seedForUser(userId: string) {
   db.transaction((tx) => {
-    tx.delete(spools).where(eq(spools.userId, userId)).run()
-    tx.delete(filaments).where(eq(filaments.userId, userId)).run()
-    tx.delete(manufacturers).where(eq(manufacturers.userId, userId)).run()
-    tx.delete(materials).where(eq(materials.userId, userId)).run()
-    tx.delete(featuresTable).where(eq(featuresTable.userId, userId)).run()
-    tx.delete(colors).where(eq(colors.userId, userId)).run()
+    clearUserData(tx, userId)
 
     const elegoo = tx.insert(manufacturers).values({ userId, name: 'Elegoo' }).returning().get()
     const esun = tx.insert(manufacturers).values({ userId, name: 'eSUN' }).returning().get()

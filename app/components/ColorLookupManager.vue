@@ -22,10 +22,11 @@ async function addColor() {
 }
 
 async function saveColor() {
-  if (!editing.value) return
-  await $fetch(`/api/colors/${editing.value.id}`, {
+  const current = editing.value
+  if (!current) return
+  await $fetch(`/api/colors/${current.id}`, {
     method: 'PUT',
-    body: { name: editing.value.name, hex: editing.value.hex },
+    body: { name: current.name, hex: current.hex },
   })
   editing.value = null
   await refresh()
@@ -57,7 +58,7 @@ async function deleteColor(id: number) {
       <UTable :columns="columns" :data="colors ?? []">
         <template #name-cell="{ row }">
           <UInput
-            v-if="editing?.id === row.original.id"
+            v-if="editing && editing.id === row.original.id"
             v-model="editing.name"
             class="w-full"
             @keydown.enter.prevent="saveColor"
@@ -67,7 +68,7 @@ async function deleteColor(id: number) {
         </template>
 
         <template #hex-cell="{ row }">
-          <div v-if="editing?.id === row.original.id" class="flex items-center gap-2">
+          <div v-if="editing && editing.id === row.original.id" class="flex items-center gap-2">
             <input v-model="editing.hex" class="h-7 w-9 cursor-pointer border border-default rounded" type="color" />
             <span class="text-xs text-muted">{{ editing.hex }}</span>
           </div>
@@ -79,7 +80,7 @@ async function deleteColor(id: number) {
 
         <template #actions-cell="{ row }">
           <div class="flex gap-1 justify-end">
-            <template v-if="editing?.id === row.original.id">
+            <template v-if="editing && editing.id === row.original.id">
               <UButton color="primary" icon="i-lucide-check" size="xs" variant="ghost" @click="saveColor" />
               <UButton color="neutral" icon="i-lucide-x" size="xs" variant="ghost" @click="editing = null" />
             </template>
