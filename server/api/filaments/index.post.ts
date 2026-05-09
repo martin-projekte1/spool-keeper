@@ -13,8 +13,8 @@ export default defineEventHandler(async (event) => {
     featureIds: body.featureIds,
   })
 
-  const newFilament = await db.transaction(async (tx) => {
-    const [insertedFilament] = await tx.insert(filaments).values({
+  const newFilament = db.transaction((tx) => {
+    const insertedFilament = tx.insert(filaments).values({
       userId,
       name: body.name.trim(),
       materialId: refs.materialId,
@@ -25,24 +25,24 @@ export default defineEventHandler(async (event) => {
       printTempMax: body.printTempMax,
       imageUrl: body.imageUrl ?? null,
       ean: body.ean ?? null,
-    }).returning()
+    }).returning().get()
 
     if (!insertedFilament) throw createError({ statusCode: 500, message: 'Insert failed' })
 
     if (refs.featureIds.length) {
-      await tx.insert(filamentFeatures).values(
+      tx.insert(filamentFeatures).values(
         refs.featureIds.map(featureId => ({ filamentId: insertedFilament.id, featureId })),
-      )
+      ).run()
     }
 
-    await tx.insert(spools).values({
+    tx.insert(spools).values({
       userId,
       filamentId: insertedFilament.id,
       purchasedAt: body.purchasedAt ?? null,
       initialWeightG: body.initialWeightG ?? 1000,
       remainingWeightG: body.remainingWeightG ?? body.initialWeightG ?? 1000,
       status: 'sealed',
-    })
+    }).run()
 
     return insertedFilament
   })

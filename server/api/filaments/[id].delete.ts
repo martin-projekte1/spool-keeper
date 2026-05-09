@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
 
   if (!filament) throw createError({ statusCode: 404, message: 'Filament not found' })
 
-  await db.transaction(async (tx) => {
-    await tx.delete(spools).where(eq(spools.filamentId, id))
-    await tx.delete(filaments).where(and(eq(filaments.id, id), eq(filaments.userId, userId)))
+  db.transaction((tx) => {
+    tx.delete(spools).where(eq(spools.filamentId, id)).run()
+    tx.delete(filaments).where(and(eq(filaments.id, id), eq(filaments.userId, userId))).run()
   })
 
   await deleteUploadedImage(filament.imageUrl)

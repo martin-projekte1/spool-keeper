@@ -1,12 +1,14 @@
 <script lang="ts" setup>
+import type { FilamentRecord, LookupItem } from '~/types/filament'
+
 const materialFilter = ref<number | null>(null)
 const manufacturerFilter = ref<string | null>(null)
 const featureFilter = ref<string[]>([])
 const search = ref('')
 
-const { data: filamentsRaw, refresh } = await useFetch('/api/filaments')
-const { data: materialsData } = await useFetch('/api/materials')
-const { data: featuresData } = await useFetch('/api/features')
+const { data: filamentsRaw, refresh } = await useFetch<FilamentRecord[]>('/api/filaments')
+const { data: materialsData } = await useFetch<LookupItem[]>('/api/materials')
+const { data: featuresData } = await useFetch<LookupItem[]>('/api/features')
 
 const materialOptions = computed(() => {
   const base = [{ label: 'All Materials', value: null }]
@@ -37,11 +39,11 @@ const filaments = computed(() => {
         f.material?.name,
         f.color?.name,
         f.manufacturer?.name,
-        ...(f.features?.map((ft: { name: string }) => ft.name) ?? []),
+        ...f.features.map(ft => ft.name),
       ].filter(Boolean).join(' ').toLowerCase()
       const matchSearch = !search.value || searchTarget.includes(search.value.toLowerCase())
       const matchManufacturer = !manufacturerFilter.value || f.manufacturer?.name === manufacturerFilter.value
-      const filamentFeatureIds = f.features?.map((ft: { id: number }) => String(ft.id)) ?? []
+      const filamentFeatureIds = f.features.map(ft => String(ft.id))
       const matchFeatures = featureFilter.value.length === 0 || featureFilter.value.every(fid => filamentFeatureIds.includes(fid))
       return matchMaterial && matchSearch && matchManufacturer && matchFeatures
     })
@@ -65,15 +67,15 @@ const filaments = computed(() => {
       return {
         id: f.id,
         materialId: f.materialId,
-        featureIds: f.features?.map((ft: { id: number }) => ft.id) ?? [],
+        featureIds: f.features.map(ft => ft.id),
         name: f.name,
         material: f.material?.name ?? '—',
         manufacturer: f.manufacturer?.name ?? '—',
         color: f.color?.name ?? '—',
         colorHex: f.color?.hex ?? '#888888',
         diameter: `${f.diameter ?? 1.75} mm`,
-        features: f.features?.map((ft: { name: string }) => ft.name).join(', ') ?? '',
-        imageUrl: f.imageUrl ?? '/images/filaments/placeholder.png',
+        features: f.features.map(ft => ft.name).join(', '),
+        imageUrl: f.imageUrl ?? '/images/filaments/pla-plus-hf-black.webp',
         imageAlt: `${f.manufacturer?.name} ${f.name}`,
         printTemp: `${f.printTempMin}–${f.printTempMax}°C`,
         purchased: spool?.purchasedAt ?? '—',

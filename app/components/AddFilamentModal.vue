@@ -1,14 +1,20 @@
 <script lang="ts" setup>
+import type { SpoolStatus } from '~/types/filament'
+import { SPOOL_STATUS_OPTIONS } from '~/types/filament'
+
 defineProps<{ modelValue: boolean }>()
 const emit = defineEmits<{
   'update:modelValue': [value: boolean]
   'created': []
 }>()
 
-const { data: manufacturers } = await useFetch('/api/manufacturers')
-const { data: materialsData } = await useFetch('/api/materials')
-const { data: colorsData } = await useFetch('/api/colors')
-const { data: featuresData } = await useFetch('/api/features')
+const {
+  colors,
+  features,
+  manufacturerOptions,
+  materialOptions,
+  colorOptions,
+} = useFilamentLookups()
 
 const state = reactive({
   name: '',
@@ -20,7 +26,7 @@ const state = reactive({
   printTempMax: 220,
   featureIds: [] as number[],
   initialWeightG: 1000,
-  status: 'sealed',
+  status: 'sealed' as SpoolStatus,
 })
 
 const loading = ref(false)
@@ -32,8 +38,8 @@ const imagePreviewUrl = computed(() =>
 const scannerOpen = ref(false)
 
 const selectedColorHex = computed(() => {
-  if (!state.colorId || !colorsData.value) return null
-  return colorsData.value.find(c => c.id === state.colorId)?.hex ?? null
+  if (!state.colorId || !colors.value) return null
+  return colors.value?.find(c => c.id === state.colorId)?.hex ?? null
 })
 
 function onImageChange(event: Event) {
@@ -45,7 +51,7 @@ function reset() {
     name: '', materialId: undefined, manufacturerId: undefined,
     colorId: undefined, diameter: 1.75,
     printTempMin: 190, printTempMax: 220,
-    featureIds: [], initialWeightG: 1000, status: 'sealed',
+    featureIds: [], initialWeightG: 1000, status: 'sealed' as SpoolStatus,
   })
   ean.value = ''
   imageFile.value = null
@@ -98,7 +104,7 @@ async function saveFilament() {
           <UFormField label="Material">
             <USelect
                 v-model="state.materialId"
-                :items="materialsData?.map(m => ({ label: m.name, value: m.id })) ?? []"
+                :items="materialOptions"
                 class="w-full"
                 placeholder="Select…"
             />
@@ -107,7 +113,7 @@ async function saveFilament() {
           <UFormField label="Manufacturer">
             <USelect
                 v-model="state.manufacturerId"
-                :items="manufacturers?.map(m => ({ label: m.name, value: m.id })) || []"
+                :items="manufacturerOptions"
                 class="w-full"
                 placeholder="Select..."
             />
@@ -118,7 +124,7 @@ async function saveFilament() {
           <div class="flex gap-2 items-center">
             <USelect
                 v-model="state.colorId"
-                :items="colorsData?.map(c => ({ label: c.name, value: c.id })) ?? []"
+                :items="colorOptions"
                 class="flex-1"
                 placeholder="Select color…"
             />
@@ -133,7 +139,7 @@ async function saveFilament() {
         <UFormField label="Features">
           <div class="flex flex-wrap gap-3">
             <label
-                v-for="feat in featuresData"
+                v-for="feat in features"
                 :key="feat.id"
                 class="flex items-center gap-1.5 text-sm cursor-pointer select-none"
             >
@@ -188,11 +194,7 @@ async function saveFilament() {
           <UFormField label="Spool Status">
             <USelect
                 v-model="state.status"
-                :items="[
-                { label: 'Sealed', value: 'sealed' },
-                { label: 'Open', value: 'open' },
-                { label: 'Active', value: 'active' },
-              ]"
+                :items="SPOOL_STATUS_OPTIONS"
                 class="w-full"
             />
           </UFormField>

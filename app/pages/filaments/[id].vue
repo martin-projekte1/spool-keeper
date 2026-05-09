@@ -1,48 +1,16 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
+import type { EditableSpool, FilamentRecord } from '~/types/filament'
+import { SPOOL_STATUS_OPTIONS } from '~/types/filament'
 
 const route = useRoute()
 const toast = useToast()
 
-interface Spool {
-  id: number
-  status: 'sealed' | 'open' | 'active'
-  remainingWeightG: number
-  initialWeightG: number
-  purchasedAt: string | null
-}
-
-interface EditableSpool {
-  id: number | null
-  status: 'sealed' | 'open' | 'active'
-  remainingWeightG: number
-  initialWeightG: number
-  purchasedAt: string
-}
-
-interface FilamentDetail {
-  id: number
-  name: string
-  material: { id: number; name: string } | null
-  color: { id: number; name: string; hex: string } | null
-  diameter: number | null
-  ean: string | null
-  manufacturerId: number | null
-  features: { id: number; name: string }[]
-  imageUrl: string | null
-  printTempMin: number
-  printTempMax: number
-  spools: Spool[]
-}
-
-const { data: filament, pending, error, refresh } = await useFetch<FilamentDetail>(`/api/filaments/${route.params.id}`)
-const { data: manufacturers } = await useFetch('/api/manufacturers')
-const { data: materialsData } = await useFetch('/api/materials')
-const { data: colorsData } = await useFetch('/api/colors')
-const { data: featuresData } = await useFetch('/api/features')
+const { data: filament, pending, error, refresh } = await useFetch<FilamentRecord>(`/api/filaments/${route.params.id}`)
+const { colors, features, manufacturerOptions, materialOptions, colorOptions } = useFilamentLookups()
 
 useRealtimeUpdates((event, value) => {
-  if (event === 'data:changed') refresh()
+  if (event === 'data:changed' && !deleting.value && !leavingPage.value) refresh()
   if (event === 'qr:scanned' && value && /^\d+$/.test(value)) {
     const t = toast.add({
       title: 'QR Code Scanned',
@@ -57,28 +25,25 @@ useRealtimeUpdates((event, value) => {
 const saving = ref(false)
 const savingSpools = ref(false)
 const deleting = ref(false)
+const leavingPage = ref(false)
 const showDeleteConfirm = ref(false)
 const scannerOpen = ref(false)
 const spoolsEditing = ref(false)
 
 async function deleteFilament() {
   deleting.value = true
+  leavingPage.value = true
   try {
     await $fetch(`/api/filaments/${route.params.id}`, { method: 'DELETE' })
     await navigateTo('/')
   } catch {
+    leavingPage.value = false
     toast.add({ title: 'Error deleting filament', color: 'error' })
   } finally {
     deleting.value = false
     showDeleteConfirm.value = false
   }
 }
-
-const statusOptions = [
-  { label: 'Sealed', value: 'sealed' as const },
-  { label: 'Open', value: 'open' as const },
-  { label: 'Active', value: 'active' as const },
-]
 
 const formState = reactive({
   name: '',
@@ -96,8 +61,8 @@ const formState = reactive({
 const editableSpools = ref<EditableSpool[]>([])
 
 const selectedColorHex = computed(() => {
-  if (!formState.colorId || !colorsData.value) return '#888888'
-  return colorsData.value.find(c => c.id === formState.colorId)?.hex ?? '#888888'
+  if (!formState.colorId || !colors.value) return '#888888'
+  return colors.value.find(c => c.id === formState.colorId)?.hex ?? '#888888'
 })
 
 watch(filament, (val) => {
@@ -109,10 +74,10 @@ watch(filament, (val) => {
   formState.diameter = val.diameter ?? 1.75
   formState.printTempMin = val.printTempMin ?? 190
   formState.printTempMax = val.printTempMax ?? 220
-  formState.featureIds = val.features?.map(f => f.id) ?? []
+  formState.featureIds = val.features.map(f => f.id)
   formState.imageUrl = val.imageUrl ?? null
   formState.ean = val.ean ?? ''
-  editableSpools.value = (val.spools ?? []).map(s => ({
+  editableSpools.value = val.spools.map(s => ({
     id: s.id,
     status: s.status,
     remainingWeightG: s.remainingWeightG,
@@ -125,14 +90,14 @@ async function updateFilament() {
   if (!filament.value) return
   saving.value = true
   try {
-    const updated = await $fetch<FilamentDetail>(`/api/filaments/${route.params.id}`, {
+    const updated = await $fetch<FilamentRecord>(`/api/filaments/${route.params.id}`, {
       method: 'PUT',
       body: { ...formState },
     })
     filament.value = {
       ...filament.value,
       ...updated,
-      features: (featuresData.value ?? []).filter(f => formState.featureIds.includes(f.id)),
+      features: (features.value ?? []).filter(f => formState.featureIds.includes(f.id)),
       spools: filament.value.spools,
       material: filament.value.material,
       color: filament.value.color,
@@ -256,7 +221,7 @@ async function saveSpools() {
             <UFormField label="Material">
               <USelect
                   v-model="formState.materialId"
-                  :items="materialsData?.map(m => ({ label: m.name, value: m.id })) ?? []"
+                  :items="materialOptions"
                   class="w-full"
                   placeholder="Select…"
               />
@@ -265,7 +230,7 @@ async function saveSpools() {
             <UFormField label="Manufacturer">
               <USelect
                   v-model="formState.manufacturerId"
-                  :items="manufacturers?.map(m => ({ label: m.name, value: m.id })) ?? []"
+                  :items="manufacturerOptions"
                   class="w-full"
                   placeholder="Select…"
               />
@@ -276,7 +241,7 @@ async function saveSpools() {
             <div class="flex gap-2 items-center">
               <USelect
                   v-model="formState.colorId"
-                  :items="colorsData?.map(c => ({ label: c.name, value: c.id })) ?? []"
+                  :items="colorOptions"
                   class="flex-1"
                   placeholder="Select color…"
               />
@@ -306,7 +271,7 @@ async function saveSpools() {
           <UFormField label="Features">
             <div class="flex flex-wrap gap-3">
               <label
-                  v-for="feat in featuresData"
+                  v-for="feat in features"
                   :key="feat.id"
                   class="flex items-center gap-1.5 text-sm cursor-pointer select-none"
               >
@@ -400,17 +365,17 @@ async function saveSpools() {
             <tbody>
               <tr v-for="(spool, i) in editableSpools" :key="spool.id ?? `new-${i}`" class="border-b border-default last:border-0">
                 <td class="py-2 pr-4">
-                  <USelect v-if="spoolsEditing" v-model="spool.status" :items="statusOptions" class="w-32" size="sm" />
+                  <USelect v-if="spoolsEditing" v-model="spool.status" :items="SPOOL_STATUS_OPTIONS" class="w-32" size="sm" />
                   <UBadge v-else :color="spool.status === 'sealed' ? 'success' : spool.status === 'open' ? 'primary' : 'secondary'" variant="subtle">
                     {{ spool.status }}
                   </UBadge>
                 </td>
                 <td class="py-2 pr-4">
-                  <UInput v-if="spoolsEditing" v-model.number="spool.remainingWeightG" class="w-28" min="0" size="sm" step="1" type="number" />
+                  <UInput v-if="spoolsEditing" v-model.number="spool.remainingWeightG" class="w-28" min="0" size="sm" step="100" type="number" />
                   <span v-else>{{ spool.remainingWeightG }} g</span>
                 </td>
                 <td class="py-2 pr-4">
-                  <UInput v-if="spoolsEditing" v-model.number="spool.initialWeightG" class="w-28" min="0" size="sm" step="1" type="number" />
+                  <UInput v-if="spoolsEditing" v-model.number="spool.initialWeightG" class="w-28" min="0" size="sm" step="100" type="number" />
                   <span v-else>{{ spool.initialWeightG }} g</span>
                 </td>
                 <td class="py-2">

@@ -35,10 +35,12 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0",
     "vue": "^3.5.34",
-    "vue-router": "^4.6.4"
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.106",
     "@types/better-sqlite3": "^7.6.13",
+    "@vue/language-core": "^3.2.8",
     "drizzle-kit": "^0.31.10",
     "node-gyp": "^12.3.0"
   }

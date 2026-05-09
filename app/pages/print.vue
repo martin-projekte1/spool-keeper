@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-const { data: filamentsRaw } = await useFetch('/api/filaments')
+import type { FilamentRecord } from '~/types/filament'
+
+const { data: filamentsRaw } = await useFetch<FilamentRecord[]>('/api/filaments')
 
 interface FilamentRow {
   id: number

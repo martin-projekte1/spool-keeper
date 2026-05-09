@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const {user, clear} = useUserSession()
+const toast = useToast()
 
 const language = ref('en')
 const resetting = ref(false)
@@ -15,6 +16,10 @@ async function resetData() {
   resetting.value = true
   try {
     await $fetch('/api/seed', {method: 'POST'})
+    toast.add({
+      title: 'Demo data reset successfully',
+      icon: 'i-lucide-check-circle',
+    })
     await navigateTo('/')
   } finally {
     resetting.value = false

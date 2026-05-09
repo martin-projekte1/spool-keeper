@@ -71,10 +71,11 @@ export async function validateOwnedFilamentReferences(
   }
 
   if (normalizedFeatureIds.length > 0) {
-    const [{ value: ownedFeatureCount }] = await db
+    const featureCountRows = await db
       .select({ value: count() })
       .from(featuresTable)
       .where(and(eq(featuresTable.userId, userId), inArray(featuresTable.id, normalizedFeatureIds)))
+    const ownedFeatureCount = featureCountRows[0]?.value ?? 0
 
     if (ownedFeatureCount !== normalizedFeatureIds.length) {
       throw createError({ statusCode: 403, statusMessage: 'One or more features do not belong to current user' })
