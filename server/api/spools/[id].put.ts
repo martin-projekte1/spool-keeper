@@ -21,5 +21,6 @@ export default defineEventHandler(async (event) => {
     .returning()
 
   if (!result) throw createError({ statusCode: 404, statusMessage: 'Not found' })
+  notifyUser(userId, 'data:changed')
   return result
 })

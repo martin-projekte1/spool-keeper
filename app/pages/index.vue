@@ -87,10 +87,26 @@ const filaments = computed(() => {
     })
 })
 
+const toast = useToast()
 const scannerOpen = ref(false)
 const addOpen = ref(false)
 
+const { send } = useRealtimeUpdates((event, value) => {
+  if (event === 'data:changed') refresh()
+  if (event === 'qr:scanned' && value && /^\d+$/.test(value)) {
+    toast.add({
+      title: 'QR Code Scanned',
+      description: 'Another device scanned a spool. Tap to open it.',
+      icon: 'i-lucide-scan-qr-code',
+      duration: 8000,
+      onClick: () => navigateTo(`/filaments/${value}`),
+    })
+  }
+})
+
 function onQrScanned(value: string) {
+  scannerOpen.value = false
+  send({ event: 'qr:scanned', value })
   const id = parseInt(value, 10)
   if (!isNaN(id)) navigateTo(`/filaments/${id}`)
 }

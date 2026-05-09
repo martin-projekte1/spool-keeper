@@ -109,5 +109,8 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    experimental: {
+      websocket: true,
+    },
   },
 })

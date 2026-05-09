@@ -35,5 +35,6 @@ export default defineEventHandler(async (event) => {
     status: 'sealed',
   })
 
+  notifyUser(userId, 'data:changed')
   return newFilament
 })

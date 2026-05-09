@@ -32,5 +32,6 @@ export default defineEventHandler(async (event) => {
     )
   }
 
+  notifyUser(userId, 'data:changed')
   return updated
 })

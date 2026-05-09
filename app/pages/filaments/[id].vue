@@ -41,6 +41,19 @@ const { data: materialsData } = await useFetch('/api/materials')
 const { data: colorsData } = await useFetch('/api/colors')
 const { data: featuresData } = await useFetch('/api/features')
 
+useRealtimeUpdates((event, value) => {
+  if (event === 'data:changed') refresh()
+  if (event === 'qr:scanned' && value && /^\d+$/.test(value)) {
+    toast.add({
+      title: 'QR Code Scanned',
+      description: 'Another device scanned a spool. Tap to open it.',
+      icon: 'i-lucide-scan-qr-code',
+      duration: 8000,
+      onClick: () => navigateTo(`/filaments/${value}`),
+    })
+  }
+})
+
 const saving = ref(false)
 const savingSpools = ref(false)
 const scannerOpen = ref(false)
