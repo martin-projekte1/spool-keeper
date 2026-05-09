@@ -6,7 +6,7 @@
 .cache
 dist
 
-# Node dependencies
+# Node build/deps
 node_modules
 
 # Logs
@@ -31,8 +31,9 @@ data/
 
 # AI and MD Related
 .aiignore
-.claude
 .aiassistant
+.claude
+.junie
 internal_docs
 internal_docs/INTERNAL.md
 internal_docs/TODO.md
