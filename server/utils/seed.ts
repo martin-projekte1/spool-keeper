@@ -1,9 +1,9 @@
 import { manufacturers, filaments, spools, materials, featuresTable, colors, filamentFeatures } from '#server/db/schema'
-import { eq } from 'drizzle-orm'
 import { clearUserData } from './ownership'
+import { db } from './db'
 
 export async function seedForUser(userId: string) {
-  db.transaction((tx) => {
+  await db.transaction(async (tx) => {
     clearUserData(tx, userId)
 
     const elegoo = tx.insert(manufacturers).values({ userId, name: 'Elegoo' }).returning().get()
