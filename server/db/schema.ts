@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm'
 
 export const manufacturers = sqliteTable('manufacturers', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: text('user_id').notNull(),
+  userId: text('user_id').notNull().default('default'),
   name: text('name').notNull(),
   website: text('website'),
   createdAt: text('created_at').default(sql`(datetime('now'))`),
@@ -11,7 +11,7 @@ export const manufacturers = sqliteTable('manufacturers', {
 
 export const materials = sqliteTable('materials', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  userId: text('user_id').notNull(),
+  userId: text('user_id').notNull().default('default'),
   name: text('name').notNull(),
 })
 
