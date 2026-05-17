@@ -16,7 +16,7 @@ Track spools, remaining weight, print temperatures, and generate QR labels.
 ## Local Development
 
 ```bash
-# Recommended: Node.js 24+, pnpm 10
+# Recommended: Node.js 24+, pnpm 10+
 cp .env.example .env   # fill in Google OAuth credentials & session password
 pnpm install
 pnpm dev

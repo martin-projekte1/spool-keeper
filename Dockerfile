@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN pnpm build
+RUN NODE_OPTIONS=--max-old-space-size=3072 pnpm build
 
 # --- Runtime Stage ---
 FROM node:24-alpine

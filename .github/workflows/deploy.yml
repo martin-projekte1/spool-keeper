@@ -34,6 +34,9 @@ jobs:
           tags: ghcr.io/martin-projekte1/spool-keeper:latest
           cache-from: type=gha
           cache-to: type=gha,mode=min
+          provenance: false
+        env:
+          BUILDKIT_PROGRESS: plain
 
       - name: Deploy on VPS
         run: |
