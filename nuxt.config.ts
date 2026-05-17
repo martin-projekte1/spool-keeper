@@ -118,6 +118,10 @@ export default defineNuxtConfig({
 
   nitro: {
     compressPublicAssets: true,
+    prerender: {
+      crawlLinks: false,
+      routes: [],
+    },
     experimental: {
       websocket: true,
       openAPI: true,
