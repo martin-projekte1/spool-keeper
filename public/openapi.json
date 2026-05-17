@@ -1,0 +1,1158 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Spool Keeper API",
+    "version": "1.0.0",
+    "description": "REST API for managing 3D printing filament spools."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Local Development Server",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "": {
+      "get": {
+        "tags": [
+          "App Routes"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/account": {
+      "delete": {
+        "tags": [
+          "Account"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "{ ok: true }"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Delete account",
+        "description": "Permanently deletes all data for the authenticated user and clears their session. Irreversible.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      }
+    },
+    "/api/colors/{id}": {
+      "delete": {
+        "tags": [
+          "Colors"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Color not found"
+          },
+          "409": {
+            "description": "Color is still referenced by one or more filaments"
+          }
+        },
+        "summary": "Delete color",
+        "description": "Deletes a color. Blocked with 409 if any filament still references it.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Colors"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated color",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name or hex is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Color not found"
+          }
+        },
+        "summary": "Update color",
+        "description": "Updates the name and hex value of a color.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/colors": {
+      "get": {
+        "tags": [
+          "Colors"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of colors",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "List colors",
+        "description": "Returns all colors for the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Colors"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created color",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name or hex is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Create color",
+        "description": "Creates a new color with a display name and hex value.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/features/{id}": {
+      "delete": {
+        "tags": [
+          "Features"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Feature not found"
+          },
+          "409": {
+            "description": "Feature is still referenced by one or more filaments"
+          }
+        },
+        "summary": "Delete feature",
+        "description": "Deletes a feature. Blocked with 409 if any filament still references it.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Features"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated feature",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Feature not found"
+          }
+        },
+        "summary": "Update feature",
+        "description": "Renames a feature.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/features": {
+      "get": {
+        "tags": [
+          "Features"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of features",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "List features",
+        "description": "Returns all features for the authenticated user (e.g. silk, glow-in-the-dark, matte).",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created feature",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Create feature",
+        "description": "Creates a new feature tag that can be attached to filaments.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/filaments/{id}": {
+      "delete": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Filament not found"
+          }
+        },
+        "summary": "Delete filament",
+        "description": "Deletes the filament, all its spools, and the associated image file from disk.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Filament with relations",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Filament not found"
+          }
+        },
+        "summary": "Get filament",
+        "description": "Returns a single filament by ID with all relations. Returns 404 if not found or not owned by the user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated filament",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Filament not found"
+          }
+        },
+        "summary": "Update filament",
+        "description": "Replaces all fields and the full feature set of an existing filament. Features not listed in featureIds are removed.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/filaments/{id}/image": {
+      "post": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "{ imageUrl: string }"
+          },
+          "400": {
+            "description": "No file uploaded"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Filament not found"
+          }
+        },
+        "summary": "Upload filament image",
+        "description": "Accepts a multipart/form-data upload. Converts the image to WebP (max 800×800) and replaces any existing image.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/filaments": {
+      "get": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of filament objects with relations",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "List filaments",
+        "description": "Returns all filaments for the authenticated user, joined with manufacturer, material, color, features, and spools.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Filaments"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created filament",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Create filament",
+        "description": "Creates a new filament and automatically creates its first spool (status: sealed) in a single transaction.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/manufacturers/{id}": {
+      "delete": {
+        "tags": [
+          "Manufacturers"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Manufacturer not found"
+          },
+          "409": {
+            "description": "Manufacturer is still referenced by one or more filaments"
+          }
+        },
+        "summary": "Delete manufacturer",
+        "description": "Deletes the manufacturer. Blocked with 409 if any filament still references it.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Manufacturers"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated manufacturer",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Manufacturer not found"
+          }
+        },
+        "summary": "Update manufacturer",
+        "description": "Updates the manufacturer name.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/manufacturers": {
+      "get": {
+        "tags": [
+          "Manufacturers"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of manufacturers",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "List manufacturers",
+        "description": "Returns all manufacturers for the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Manufacturers"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created manufacturer",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Create manufacturer",
+        "description": "Creates a new manufacturer for the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/materials/{id}": {
+      "delete": {
+        "tags": [
+          "Materials"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Material not found"
+          },
+          "409": {
+            "description": "Material is still referenced by one or more filaments"
+          }
+        },
+        "summary": "Delete material",
+        "description": "Deletes a material. Blocked with 409 if any filament still references it.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Materials"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated material",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Material not found"
+          }
+        },
+        "summary": "Update material",
+        "description": "Renames a material.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/materials": {
+      "get": {
+        "tags": [
+          "Materials"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of materials",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "List materials",
+        "description": "Returns all materials for the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Materials"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created material",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "400": {
+            "description": "Name is required"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Create material",
+        "description": "Creates a new material (e.g. PLA, PETG, ABS) for the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/seed": {
+      "post": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "{ ok: true, message: string }"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Seed demo data",
+        "description": "Populates the authenticated user's account with demo filaments and spools.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      }
+    },
+    "/api/spools/{id}": {
+      "put": {
+        "tags": [
+          "Spools"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated spool",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Spool not found"
+          }
+        },
+        "summary": "Update spool",
+        "description": "Updates status, remaining weight, or purchase date of a spool. Only provided fields are changed.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/spools": {
+      "post": {
+        "tags": [
+          "Spools"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Created spool",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "403": {
+            "description": "Filament not owned by user"
+          }
+        },
+        "summary": "Add spool",
+        "description": "Adds a new spool to an existing filament. The filament must belong to the authenticated user.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        }
+      }
+    },
+    "/api/ws-auth": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "{ token: string }"
+          },
+          "401": {
+            "description": "Not authenticated"
+          }
+        },
+        "summary": "Get WebSocket auth token",
+        "description": "Issues a short-lived token used to authenticate the WebSocket connection. Called automatically by the frontend.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      }
+    },
+    "/_ws": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "tags": [
+          "App Routes"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/__nuxt_error": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/__nuxt_island/{*param1}": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [
+          {
+            "name": "*param1",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/_auth/session": {
+      "delete": {
+        "tags": [
+          "API Routes"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "API Routes"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/_nuxt_icon/{collection}": {
+      "get": {
+        "tags": [
+          "API Routes"
+        ],
+        "parameters": [
+          {
+            "name": "collection",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_openapi.json": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_scalar": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_swagger": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/_ipx/{*param1}": {
+      "get": {
+        "tags": [
+          "Internal"
+        ],
+        "parameters": [
+          {
+            "name": "*param1",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

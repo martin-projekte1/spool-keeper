@@ -3,7 +3,6 @@ export default defineEventHandler(async (event) => {
 
   if (path.startsWith('/auth/')) return
   if (path === '/login') return
-  if (path === '/_openapi.json') return
 
   const session = await getUserSession(event)
 
