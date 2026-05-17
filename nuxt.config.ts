@@ -22,7 +22,6 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-auth-utils',
     'nuxt-qrcode',
-    '@scalar/nuxt',
   ],
 
   qrcode: {
@@ -71,6 +70,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: null,
+      maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       globPatterns: ['**/*.{js,css,html,svg,ico}'],
       runtimeCaching: [
         {
@@ -135,9 +135,13 @@ export default defineNuxtConfig({
     },
   },
 
-  scalar: {
-    darkMode: true,
-    hideModels: false,
+  // Scalar API docs — dev only (icon set alone is 47MB, doubles build memory)
+  $development: {
+    modules: ['@scalar/nuxt'],
+    scalar: {
+      darkMode: true,
+      hideModels: false,
+    },
   },
 
   runtimeConfig: {
