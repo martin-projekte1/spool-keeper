@@ -1,5 +1,22 @@
 import { spools } from '#server/db/schema'
 import { eq, and } from 'drizzle-orm'
+import { s } from '#server/utils/openapi-schemas'
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['Spools'],
+    summary: 'Update spool',
+    description: 'Updates status, remaining weight, or purchase date of a spool. Only provided fields are changed.',
+    security: [{ sessionCookie: [] }],
+    parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
+    requestBody: { required: true, content: { 'application/json': { schema: s.spoolUpdate } } },
+    responses: {
+      200: { description: 'Updated spool', content: { 'application/json': { schema: s.spool } } },
+      401: { description: 'Not authenticated' },
+      404: { description: 'Spool not found' },
+    },
+  },
+})
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)

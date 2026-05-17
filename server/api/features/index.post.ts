@@ -1,4 +1,20 @@
 import { featuresTable } from '#server/db/schema'
+import { s } from '#server/utils/openapi-schemas'
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['Features'],
+    summary: 'Create feature',
+    description: 'Creates a new feature tag that can be attached to filaments.',
+    security: [{ sessionCookie: [] }],
+    requestBody: { required: true, content: { 'application/json': { schema: s.featureInsert } } },
+    responses: {
+      200: { description: 'Created feature', content: { 'application/json': { schema: s.feature } } },
+      400: { description: 'Name is required' },
+      401: { description: 'Not authenticated' },
+    },
+  },
+})
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)

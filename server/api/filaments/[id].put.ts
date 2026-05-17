@@ -1,6 +1,25 @@
 import { filaments, filamentFeatures } from '#server/db/schema'
 import { and, eq } from 'drizzle-orm'
 
+import { s } from '#server/utils/openapi-schemas'
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['Filaments'],
+    summary: 'Update filament',
+    description: 'Replaces all fields and the full feature set of an existing filament. Features not listed in featureIds are removed.',
+    security: [{ sessionCookie: [] }],
+    parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
+    requestBody: { required: true, content: { 'application/json': { schema: s.filamentInsert } } },
+    responses: {
+      200: { description: 'Updated filament', content: { 'application/json': { schema: s.filament } } },
+      400: { description: 'Name is required' },
+      401: { description: 'Not authenticated' },
+      404: { description: 'Filament not found' },
+    },
+  },
+})
+
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
   const id = normalizeRouteId(getRouterParam(event, 'id'))

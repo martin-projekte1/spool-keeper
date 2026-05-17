@@ -1,6 +1,23 @@
 import { filaments, spools } from '#server/db/schema'
 import { and, eq } from 'drizzle-orm'
 
+import { s } from '#server/utils/openapi-schemas'
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['Filaments'],
+    summary: 'Delete filament',
+    description: 'Deletes the filament, all its spools, and the associated image file from disk.',
+    security: [{ sessionCookie: [] }],
+    parameters: [{ in: 'path', name: 'id', required: true, schema: { type: 'integer' } }],
+    responses: {
+      200: { description: 'OK', content: { 'application/json': { schema: s.ok } } },
+      401: { description: 'Not authenticated' },
+      404: { description: 'Filament not found' },
+    },
+  },
+})
+
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)
   const id = normalizeRouteId(getRouterParam(event, 'id'))

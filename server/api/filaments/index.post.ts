@@ -1,4 +1,20 @@
 import { filaments, spools, filamentFeatures } from '#server/db/schema'
+import { s } from '#server/utils/openapi-schemas'
+
+defineRouteMeta({
+  openAPI: {
+    tags: ['Filaments'],
+    summary: 'Create filament',
+    description: 'Creates a new filament and automatically creates its first spool (status: sealed) in a single transaction.',
+    security: [{ sessionCookie: [] }],
+    requestBody: { required: true, content: { 'application/json': { schema: s.filamentInsert } } },
+    responses: {
+      200: { description: 'Created filament', content: { 'application/json': { schema: s.filament } } },
+      400: { description: 'Name is required' },
+      401: { description: 'Not authenticated' },
+    },
+  },
+})
 
 export default defineEventHandler(async (event) => {
   const userId = await requireUserId(event)

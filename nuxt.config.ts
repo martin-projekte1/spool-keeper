@@ -22,6 +22,7 @@ export default defineNuxtConfig({
     '@vite-pwa/nuxt',
     'nuxt-auth-utils',
     'nuxt-qrcode',
+    '@scalar/nuxt',
   ],
 
   qrcode: {
@@ -119,7 +120,20 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     experimental: {
       websocket: true,
+      openAPI: true,
     },
+    openAPI: {
+      meta: {
+        title: 'Spool Keeper API',
+        description: 'REST API for managing 3D printing filament spools.',
+        version: '1.0.0',
+      },
+    },
+  },
+
+  scalar: {
+    darkMode: true,
+    hideModels: false,
   },
 
   runtimeConfig: {
