@@ -5,7 +5,7 @@ WORKDIR /app
 # Build tools are required for native modules like better-sqlite3
 RUN apk add --no-cache python3 make g++
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@11.1.2 --activate
 
 COPY package.json pnpm-lock.yaml ./
 
@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-RUN NODE_OPTIONS=--max-old-space-size=3072 pnpm build
+RUN NODE_OPTIONS=--max-old-space-size=4096 pnpm build
 
 # --- Runtime Stage ---
 FROM node:24-alpine
