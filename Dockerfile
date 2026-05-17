@@ -7,7 +7,7 @@ RUN apk add --no-cache python3 make g++
 
 RUN corepack enable && corepack prepare pnpm@11.1.2 --activate
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 # Native build scripts are executed according to pnpm.onlyBuiltDependencies in package.json
 RUN pnpm install --frozen-lockfile
