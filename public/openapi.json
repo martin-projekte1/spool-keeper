@@ -8,7 +8,7 @@
   "servers": [
     {
       "url": "http://localhost:3000",
-      "description": "Stored from Local Development Server",
+      "description": "Local Development Server",
       "variables": {}
     }
   ],
@@ -885,6 +885,45 @@
       }
     },
     "/api/spools/{id}": {
+      "delete": {
+        "tags": [
+          "Spools"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Deleted spool",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "401": {
+            "description": "Not authenticated"
+          },
+          "404": {
+            "description": "Spool not found"
+          },
+          "409": {
+            "description": "Cannot delete the last spool on a filament"
+          }
+        },
+        "summary": "Delete spool",
+        "description": "Deletes a spool. Fails with 409 if it is the last spool on the filament.",
+        "security": [
+          {
+            "sessionCookie": []
+          }
+        ]
+      },
       "put": {
         "tags": [
           "Spools"
