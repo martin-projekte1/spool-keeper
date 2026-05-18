@@ -36,6 +36,20 @@ function addSpool() {
   })
 }
 
+async function deleteSpool(spool: EditableSpool, index: number) {
+  if (spool.id === null) {
+    editableSpools.value.splice(index, 1)
+    return
+  }
+  try {
+    await $fetch(`/api/spools/${spool.id}`, { method: 'DELETE' })
+    emit('saved')
+    toast.add({ title: 'Spool deleted', icon: 'i-lucide-trash-2' })
+  } catch (err: any) {
+    toast.add({ title: err?.data?.statusMessage ?? 'Error deleting spool', color: 'error' })
+  }
+}
+
 async function saveSpools() {
   savingSpools.value = true
   try {
@@ -111,6 +125,7 @@ async function saveSpools() {
             <th class="text-left py-2 pr-4 font-medium text-muted">Remaining (g)</th>
             <th class="text-left py-2 pr-4 font-medium text-muted">Initial (g)</th>
             <th class="text-left py-2 font-medium text-muted">Purchased</th>
+            <th v-if="spoolsEditing" class="py-2 w-8"></th>
           </tr>
         </thead>
         <tbody>
@@ -132,6 +147,16 @@ async function saveSpools() {
             <td class="py-2">
               <UInput v-if="spoolsEditing" v-model="spool.purchasedAt" class="w-40" size="sm" type="date" />
               <span v-else>{{ spool.purchasedAt || '—' }}</span>
+            </td>
+            <td v-if="spoolsEditing" class="py-2 pl-2">
+              <UButton
+                  :disabled="editableSpools.length <= 1"
+                  color="error"
+                  icon="i-lucide-trash-2"
+                  size="xs"
+                  variant="ghost"
+                  @click="deleteSpool(spool, i)"
+              />
             </td>
           </tr>
         </tbody>

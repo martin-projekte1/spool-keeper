@@ -18,7 +18,7 @@ export async function seedForUser(userId: string) {
     const plus = tx.insert(featuresTable).values({ userId, name: 'Plus' }).returning().get()
     const matte = tx.insert(featuresTable).values({ userId, name: 'Matte' }).returning().get()
 
-    const black = tx.insert(colors).values({ userId, name: 'Black', hex: '#111111' }).returning().get()
+    const black = tx.insert(colors).values({ userId, name: 'Black', hex: '#363636' }).returning().get()
     const gray = tx.insert(colors).values({ userId, name: 'Gray', hex: '#8a8a8a' }).returning().get()
     const lavaRed = tx.insert(colors).values({ userId, name: 'Lava Red', hex: '#cf3c3c' }).returning().get()
     const armyGreen = tx.insert(colors).values({ userId, name: 'Army Green', hex: '#4a5c3a' }).returning().get()

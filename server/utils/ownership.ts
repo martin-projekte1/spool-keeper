@@ -95,21 +95,21 @@ export async function assertNoFilamentUsage(
   id: number,
   kind: 'material' | 'manufacturer' | 'color' | 'feature',
 ) {
-  const usedBy = kind === 'feature'
-    ? await db
+  let usedBy: { id: number; name: string }[]
+
+  if (kind === 'feature') {
+    usedBy = await db
       .select({ id: filaments.id, name: filaments.name })
       .from(filaments)
       .innerJoin(filamentFeatures, eq(filaments.id, filamentFeatures.filamentId))
       .where(and(eq(filamentFeatures.featureId, id), eq(filaments.userId, userId)))
-    : await db
+  } else {
+    const col = { material: filaments.materialId, manufacturer: filaments.manufacturerId, color: filaments.colorId }[kind]
+    usedBy = await db
       .select({ id: filaments.id, name: filaments.name })
       .from(filaments)
-      .where(and(eq(
-        kind === 'material' ? filaments.materialId
-          : kind === 'manufacturer' ? filaments.manufacturerId
-            : filaments.colorId,
-        id
-      ), eq(filaments.userId, userId)))
+      .where(and(eq(col, id), eq(filaments.userId, userId)))
+  }
 
   if (usedBy.length > 0) {
     throw createError({
