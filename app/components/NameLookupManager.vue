@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { LookupItem } from '~/types/filament'
 
+// used to display the specs, just a generic CRUD table
 type ResourceName = 'manufacturers' | 'materials' | 'features'
 
 const props = defineProps<{
@@ -38,6 +39,7 @@ async function deleteItem(id: number) {
     await $fetch(`/api/${props.resource}/${id}`, { method: 'DELETE' })
     await refresh()
   } catch (err: any) {
+    // on 409 (conflict, blocks deletion)
     const blockingFilaments = err.data?.data?.filaments as { id: number, name: string }[] | undefined
     
     toast.add({

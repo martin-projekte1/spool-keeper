@@ -6,6 +6,7 @@ const manufacturerFilter = ref<string | null>(null)
 const featureFilter = ref<string[]>([])
 const search = ref('')
 
+// api calls, data is reactive, on change the ui refreshes
 const { data: filamentsRaw, refresh } = await useFetch<FilamentRecord[]>('/api/filaments')
 const { data: materialsData } = await useFetch<LookupItem[]>('/api/materials')
 const { data: featuresData } = await useFetch<LookupItem[]>('/api/features')
@@ -93,6 +94,7 @@ const toast = useToast()
 const scannerOpen = ref(false)
 const addOpen = ref(false)
 
+// WebSocket event
 const { send } = useRealtimeUpdates((event, value) => {
   if (event === 'data:changed') refresh()
   if (event === 'qr:scanned' && value && /^\d+$/.test(value)) {
