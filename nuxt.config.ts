@@ -135,13 +135,11 @@ export default defineNuxtConfig({
     },
   },
 
-  // Scalar API docs — dev only (icon set alone is 47MB, doubles build memory)
+  // Scalar API docs - dev only (icon set alone is 47MB, doubles build memory)
   $development: {
-    modules: ['@scalar/nuxt'],
-    scalar: {
-      darkMode: true,
-      hideModels: false,
-    },
+    modules: [
+      ['@scalar/nuxt', { darkMode: true, hideModels: false }],
+    ],
   },
 
   runtimeConfig: {

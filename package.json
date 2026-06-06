@@ -3,19 +3,6 @@
   "type": "module",
   "private": true,
   "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499",
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "better-sqlite3",
-      "esbuild",
-      "sharp",
-      "vue-demi"
-    ],
-    "overrides": {
-      "serialize-javascript": "^7.0.5",
-      "esbuild@<=0.24.2": ">=0.25.0"
-    }
-  },
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -49,6 +36,8 @@
     "@types/better-sqlite3": "^7.6.13",
     "@vue/language-core": "^3.2.8",
     "drizzle-kit": "^0.31.10",
-    "node-gyp": "^12.3.0"
+    "node-gyp": "^12.3.0",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.3.3"
   }
 }
