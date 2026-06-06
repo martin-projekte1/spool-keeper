@@ -1,41 +1,120 @@
-# Nuxt dev/build outputs
-.output
-.data
-.nuxt
-.nitro
-.cache
-dist
+# My general gitignore template file for all my git repos.
 
-# Node build/deps
-node_modules
-.pnpm-store/
+# macOS
+.DS_Store
+**/.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor and IDE state
+.idea/
+.zed
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# JetBrains generated project files
+/shelf/
+/workspace.xml
+/httpRequests/
+/queries/
+/dataSources/
+/dataSources.local.xml
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+*.local
+include/secrets.h
 
 # Logs
-logs
+logs/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Misc
-.DS_Store
-.fleet
-.idea
+# Node / pnpm / Nuxt / Vite
+node_modules/
+.pnpm-store/
+.yarn/
+.output/
+.data/
+.nuxt/
+.nitro/
+.cache/
+.vite-inspect/
+.remote-assets/
+dist/
+dist-ssr/
+.wrangler/
 
-# Database
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# SQLite and local app data
 data/
 *.db
 *.db-shm
 *.db-wal
-/public/images/uploads/
+*.sqlite
+*.sqlite3
 
-# Environment
-.env
-.env.*
-!.env.example
+# PlatformIO / ESP32
+.pio/
 
-# MD Related
+# Swift / Xcode / iOS
+.build/
+.swiftpm/
+DerivedData/
+*.xcodeproj/xcuserdata/
+*.xcworkspace/xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+
+# C / C++ / CMake / generic build outputs
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+target
+
+# Coverage and test output
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Temporary local notes and assistant state
 .aiignore
-.aiassistant
-.claude
-.junie
-internal_docs
+.aiassistant/
+.claude/
+.junie/
 CLAUDE.md
 AGENTS.md
+NOTES.md
+internal_docs/
