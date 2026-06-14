@@ -1,6 +1,4 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <UFooter>
@@ -8,7 +6,9 @@
       <p class="text-sm text-muted">Spool Keeper — © Martin Reisinger</p>
     </template>
     <template #right>
-      <UButton to="/impressum" variant="link" size="xs" color="neutral">Impressum</UButton>
+      <UButton to="/impressum" variant="link" size="xs" color="neutral"
+        >Impressum</UButton
+      >
     </template>
   </UFooter>
 </template>

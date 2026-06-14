@@ -1,93 +1,92 @@
 /* Imported by main.css */
 
 .dark {
-    --ui-bg: #000000;
-    --ui-bg-muted: #0a0a0a;
-    --ui-bg-elevated: #121212;
-    --ui-bg-accented: #1f1f1f;
-    --ui-bg-inverted: #f5f5f5;
-    --ui-text: #f5f5f5;
-    --ui-text-muted: rgba(245, 245, 245, 0.55);
-    --ui-text-dimmed: rgba(245, 245, 245, 0.2);
-    --ui-text-highlighted: #ffffff;
-    --ui-text-inverted: #000000;
-    --ui-border: #121212;
-    --ui-border-muted: #1a1a1a;
-    --ui-border-accented: #2a2a2a;
+  --ui-bg: #000000;
+  --ui-bg-muted: #0a0a0a;
+  --ui-bg-elevated: #121212;
+  --ui-bg-accented: #1f1f1f;
+  --ui-bg-inverted: #f5f5f5;
+  --ui-text: #f5f5f5;
+  --ui-text-muted: rgba(245, 245, 245, 0.55);
+  --ui-text-dimmed: rgba(245, 245, 245, 0.2);
+  --ui-text-highlighted: #ffffff;
+  --ui-text-inverted: #000000;
+  --ui-border: #121212;
+  --ui-border-muted: #1a1a1a;
+  --ui-border-accented: #2a2a2a;
 
-    /* Primary — yellow */
-    --ui-color-primary-50: #fffde7;
-    --ui-color-primary-100: #fff9c4;
-    --ui-color-primary-200: #fff59d;
-    --ui-color-primary-300: #fff176;
-    --ui-color-primary-400: #ffe600;
-    --ui-color-primary-500: #fdd835;
-    --ui-color-primary-600: #f9a825;
-    --ui-color-primary-700: #f57f17;
-    --ui-color-primary-800: #e65100;
-    --ui-color-primary-900: #bf360c;
-    --ui-color-primary-950: #7f1900;
+  /* Primary — yellow */
+  --ui-color-primary-50: #fffde7;
+  --ui-color-primary-100: #fff9c4;
+  --ui-color-primary-200: #fff59d;
+  --ui-color-primary-300: #fff176;
+  --ui-color-primary-400: #ffe600;
+  --ui-color-primary-500: #fdd835;
+  --ui-color-primary-600: #f9a825;
+  --ui-color-primary-700: #f57f17;
+  --ui-color-primary-800: #e65100;
+  --ui-color-primary-900: #bf360c;
+  --ui-color-primary-950: #7f1900;
 
-    /* Secondary — blue */
-    --ui-color-secondary-50: #e3f2fd;
-    --ui-color-secondary-100: #bbdefb;
-    --ui-color-secondary-200: #90caf9;
-    --ui-color-secondary-300: #64b5f6;
-    --ui-color-secondary-400: #42a5f5;
-    --ui-color-secondary-500: #007bff;
-    --ui-color-secondary-600: #1e88e5;
-    --ui-color-secondary-700: #1565c0;
-    --ui-color-secondary-800: #0d47a1;
-    --ui-color-secondary-900: #082a6b;
-    --ui-color-secondary-950: #041540;
+  /* Secondary — blue */
+  --ui-color-secondary-50: #e3f2fd;
+  --ui-color-secondary-100: #bbdefb;
+  --ui-color-secondary-200: #90caf9;
+  --ui-color-secondary-300: #64b5f6;
+  --ui-color-secondary-400: #42a5f5;
+  --ui-color-secondary-500: #007bff;
+  --ui-color-secondary-600: #1e88e5;
+  --ui-color-secondary-700: #1565c0;
+  --ui-color-secondary-800: #0d47a1;
+  --ui-color-secondary-900: #082a6b;
+  --ui-color-secondary-950: #041540;
 
-    /* Error — red */
-    --ui-color-error-50: #ffebee;
-    --ui-color-error-100: #ffcdd2;
-    --ui-color-error-200: #ef9a9a;
-    --ui-color-error-300: #e57373;
-    --ui-color-error-400: #ef5350;
-    --ui-color-error-500: #ff3131;
-    --ui-color-error-600: #e53935;
-    --ui-color-error-700: #c62828;
-    --ui-color-error-800: #b71c1c;
-    --ui-color-error-900: #7f0000;
-    --ui-color-error-950: #4a0000;
+  /* Error — red */
+  --ui-color-error-50: #ffebee;
+  --ui-color-error-100: #ffcdd2;
+  --ui-color-error-200: #ef9a9a;
+  --ui-color-error-300: #e57373;
+  --ui-color-error-400: #ef5350;
+  --ui-color-error-500: #ff3131;
+  --ui-color-error-600: #e53935;
+  --ui-color-error-700: #c62828;
+  --ui-color-error-800: #b71c1c;
+  --ui-color-error-900: #7f0000;
+  --ui-color-error-950: #4a0000;
 
-    /* Neutral — black */
-    --ui-color-neutral-50: #f5f5f5;
-    --ui-color-neutral-100: #e8e8e8;
-    --ui-color-neutral-200: #d0d0d0;
-    --ui-color-neutral-300: #a0a0a0;
-    --ui-color-neutral-400: #707070;
-    --ui-color-neutral-500: #505050;
-    --ui-color-neutral-600: #303030;
-    --ui-color-neutral-700: #1f1f1f;
-    --ui-color-neutral-800: #121212;
-    --ui-color-neutral-900: #0a0a0a;
-    --ui-color-neutral-950: #000000;
+  /* Neutral — black */
+  --ui-color-neutral-50: #f5f5f5;
+  --ui-color-neutral-100: #e8e8e8;
+  --ui-color-neutral-200: #d0d0d0;
+  --ui-color-neutral-300: #a0a0a0;
+  --ui-color-neutral-400: #707070;
+  --ui-color-neutral-500: #505050;
+  --ui-color-neutral-600: #303030;
+  --ui-color-neutral-700: #1f1f1f;
+  --ui-color-neutral-800: #121212;
+  --ui-color-neutral-900: #0a0a0a;
+  --ui-color-neutral-950: #000000;
 }
-
 
 /* Light mode - for the plants */
 
 .light {
-    --ui-bg: #ffffff;
-    --ui-bg-muted: #f5f5f5;
-    --ui-bg-elevated: #efefef;
-    --ui-bg-accented: #e0e0e0;
-    --ui-bg-inverted: #000000;
-    --ui-text: #121212;
-    --ui-text-muted: rgba(18, 18, 18, 0.5);
-    --ui-text-dimmed: rgba(18, 18, 18, 0.3);
-    --ui-text-highlighted: #000000;
-    --ui-text-inverted: #ffffff;
-    --ui-border: #e0e0e0;
-    --ui-border-muted: #ebebeb;
-    --ui-border-accented: #d0d0d0;
+  --ui-bg: #ffffff;
+  --ui-bg-muted: #f5f5f5;
+  --ui-bg-elevated: #efefef;
+  --ui-bg-accented: #e0e0e0;
+  --ui-bg-inverted: #000000;
+  --ui-text: #121212;
+  --ui-text-muted: rgba(18, 18, 18, 0.5);
+  --ui-text-dimmed: rgba(18, 18, 18, 0.3);
+  --ui-text-highlighted: #000000;
+  --ui-text-inverted: #ffffff;
+  --ui-border: #e0e0e0;
+  --ui-border-muted: #ebebeb;
+  --ui-border-accented: #d0d0d0;
 
-    --ui-color-primary-400: #ffe600;
-    --ui-color-primary-500: #d4a800;
-    --ui-color-secondary-500: #007bff;
-    --ui-color-error-500: #ff3131;
+  --ui-color-primary-400: #ffe600;
+  --ui-color-primary-500: #d4a800;
+  --ui-color-secondary-500: #007bff;
+  --ui-color-error-500: #ff3131;
 }

@@ -1,11 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  compatibilityDate: "2025-07-15",
   hooks: {
-    'vite:extendConfig'(config) {
-      const include = config.optimizeDeps?.include
+    "vite:extendConfig"(config) {
+      const include = config.optimizeDeps?.include;
       if (Array.isArray(include)) {
-        config.optimizeDeps!.include = include.filter(dep => dep !== 'vue-qrcode-reader')
+        config.optimizeDeps!.include = include.filter(
+          (dep) => dep !== "vue-qrcode-reader",
+        );
       }
     },
   },
@@ -16,17 +18,24 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxt/ui',
-    '@nuxt/image',
-    '@nuxt/fonts',
-    '@vite-pwa/nuxt',
-    'nuxt-auth-utils',
-    'nuxt-qrcode',
+    "@nuxt/ui",
+    "@nuxt/image",
+    "@nuxt/fonts",
+    "@vite-pwa/nuxt",
+    "nuxt-auth-utils",
+    "nuxt-qrcode",
   ],
 
   qrcode: {
     reader: {
-      formats: ['qr_code', 'ean_13', 'ean_8', 'code_128', 'code_39', 'data_matrix'],
+      formats: [
+        "qr_code",
+        "ean_13",
+        "ean_8",
+        "code_128",
+        "code_39",
+        "data_matrix",
+      ],
     },
   },
 
@@ -36,48 +45,53 @@ export default defineNuxtConfig({
     },
   },
 
-  css: ['~/assets/css/main.css'],
+  css: ["~/assets/css/main.css"],
 
   colorMode: {
-    preference: 'dark',
+    preference: "dark",
   },
 
   // Optimized Font configuration for Nuxt 4
   fonts: {
     defaults: {
       weights: [400, 700],
-      styles: ['normal'],
-      subsets: ['latin'],
+      styles: ["normal"],
+      subsets: ["latin"],
     },
     // Nuxt 4 handles font-display: swap automatically or via CSS
   },
 
   pwa: {
     manifest: {
-      name: 'Spool Keeper',
-      short_name: 'SpoolKeeper',
-      description: 'Filament spool management for 3D printing.',
-      theme_color: '#111111',
-      background_color: '#111111',
-      display: 'standalone',
-      start_url: '/',
-      scope: '/',
+      name: "Spool Keeper",
+      short_name: "SpoolKeeper",
+      description: "Filament spool management for 3D printing.",
+      theme_color: "#111111",
+      background_color: "#111111",
+      display: "standalone",
+      start_url: "/",
+      scope: "/",
       icons: [
-        {src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png'},
-        {src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png'},
-        {src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable'},
+        { src: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+        { src: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+        {
+          src: "/icons/icon-512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable",
+        },
       ],
     },
     workbox: {
       navigateFallback: null,
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
-      globPatterns: ['**/*.{js,css,html,svg,ico}'],
+      globPatterns: ["**/*.{js,css,html,svg,ico}"],
       runtimeCaching: [
         {
           urlPattern: /\.(?:png|jpg|jpeg|svg)$/,
-          handler: 'CacheFirst',
+          handler: "CacheFirst",
           options: {
-            cacheName: 'filament-images',
+            cacheName: "filament-images",
             expiration: {
               maxEntries: 50,
               maxAgeSeconds: 30 * 24 * 60 * 60,
@@ -90,30 +104,33 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: {lang: 'en'},
-      title: 'Spool Keeper',
+      htmlAttrs: { lang: "en" },
+      title: "Spool Keeper",
       meta: [
-        {name: 'color-scheme', content: 'dark'},
-        {name: 'description', content: 'Filament spool management for 3D printing.'},
+        { name: "color-scheme", content: "dark" },
+        {
+          name: "description",
+          content: "Filament spool management for 3D printing.",
+        },
       ],
       link: [
-        {rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg'},
-        {rel: 'apple-touch-icon', href: '/apple-touch-icon.png'},
+        { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
+        { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       ],
       script: [
         {
-          'data-goatcounter': 'https://spoolkeeper.goatcounter.com/count',
-          src: 'https://gc.zgo.at/count.js',
+          "data-goatcounter": "https://spoolkeeper.goatcounter.com/count",
+          src: "https://gc.zgo.at/count.js",
           async: true,
-          tagPosition: 'bodyClose'
-        }
+          tagPosition: "bodyClose",
+        },
       ],
     },
   },
 
   // Cache optimized images from IPX for 1 year
   routeRules: {
-    '/_ipx/**': {headers: {'cache-control': 'max-age=31536000, immutable'}},
+    "/_ipx/**": { headers: { "cache-control": "max-age=31536000, immutable" } },
   },
 
   nitro: {
@@ -128,30 +145,28 @@ export default defineNuxtConfig({
     },
     openAPI: {
       meta: {
-        title: 'Spool Keeper API',
-        description: 'REST API for managing 3D printing filament spools.',
-        version: '1.0.0',
+        title: "Spool Keeper API",
+        description: "REST API for managing 3D printing filament spools.",
+        version: "1.0.0",
       },
     },
   },
 
   // Scalar API docs - dev only (icon set alone is 47MB, doubles build memory)
   $development: {
-    modules: [
-      ['@scalar/nuxt', { darkMode: true, hideModels: false }],
-    ],
+    modules: [["@scalar/nuxt", { darkMode: true, hideModels: false }]],
   },
 
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_SITE_URL || 'https://www.spoolkeeper.site',
+      siteUrl: process.env.NUXT_SITE_URL || "https://www.spoolkeeper.site",
     },
     session: {
-      name: 'spool-keeper-session',
+      name: "spool-keeper-session",
       cookie: {
-        sameSite: 'lax',
+        sameSite: "lax",
         secure: true,
-      }
-    }
-  }
-})
+      },
+    },
+  },
+});

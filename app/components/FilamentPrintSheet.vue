@@ -1,28 +1,29 @@
 <script lang="ts" setup>
 interface FilamentRow {
-  id: number
-  name: string
-  material: string
-  color: string
-  colorHex: string
-  manufacturer: string
+  id: number;
+  name: string;
+  material: string;
+  color: string;
+  colorHex: string;
+  manufacturer: string;
 }
 
 defineProps<{
-  selectedFilaments: FilamentRow[]
-}>()
+  selectedFilaments: FilamentRow[];
+}>();
 </script>
 
 <template>
   <Teleport to="body">
     <div class="print-sheet">
       <div class="label-grid">
-        <div
-            v-for="f in selectedFilaments"
-            :key="f.id"
-            class="label-card"
-        >
-          <Qrcode :value="String(f.id)" black-color="#000000" class="qr" white-color="#ffffff" />
+        <div v-for="f in selectedFilaments" :key="f.id" class="label-card">
+          <Qrcode
+            :value="String(f.id)"
+            black-color="#000000"
+            class="qr"
+            white-color="#ffffff"
+          />
           <div class="label-info">
             <p class="label-name">{{ f.name }}</p>
             <p class="label-meta label-muted">{{ f.manufacturer }}</p>
@@ -39,12 +40,17 @@ defineProps<{
 </template>
 
 <style>
-.print-sheet { display: none; }
+.print-sheet {
+  display: none;
+}
 
 @media print {
-  @page { margin: 8mm; }
+  @page {
+    margin: 8mm;
+  }
 
-  html, body {
+  html,
+  body {
     color-scheme: light !important;
     background: white !important;
     margin: 0 !important;
@@ -54,7 +60,9 @@ defineProps<{
   body > #__nuxt,
   body > #teleports,
   body > nav,
-  body > header { display: none !important; }
+  body > header {
+    display: none !important;
+  }
 
   .print-sheet {
     display: block !important;
@@ -86,7 +94,10 @@ defineProps<{
     flex-shrink: 0;
   }
 
-  .qr svg { width: 100%; height: 100%; }
+  .qr svg {
+    width: 100%;
+    height: 100%;
+  }
 
   .label-info {
     text-align: left;

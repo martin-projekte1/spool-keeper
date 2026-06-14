@@ -4,36 +4,45 @@
 @import "./theme.css";
 
 @layer base {
-    /* Monospace as app-wide default font */
-    *, *::before, *::after {
-        font-family: 'IBM Plex Mono', monospace;
-    }
+  /* Monospace as app-wide default font */
+  *,
+  *::before,
+  *::after {
+    font-family: "IBM Plex Mono", monospace;
+  }
 
-    /* Dot-grid background pattern */
-    body {
-        background-image: radial-gradient(circle, var(--ui-text-dimmed) 1px, transparent 1px);
-        background-size: 24px 24px;
-    }
+  /* Dot-grid background pattern */
+  body {
+    background-image: radial-gradient(
+      circle,
+      var(--ui-text-dimmed) 1px,
+      transparent 1px
+    );
+    background-size: 24px 24px;
+  }
 
-    /* Technical uppercase style for all headings */
-    h1, h2, h3, h4 {
-        font-family: 'Space Grotesk', sans-serif;
-        letter-spacing: -0.03em;
-        text-transform: uppercase;
-    }
+  /* Technical uppercase style for all headings */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
 }
 
 /* Reusable heading style for non-heading elements */
 .font-heading {
-    font-family: 'Space Grotesk', sans-serif;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
+  font-family: "Space Grotesk", sans-serif;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
 /* Small caps label style for secondary text */
 .text-muted {
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ui-text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ui-text-muted);
 }

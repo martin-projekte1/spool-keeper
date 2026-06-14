@@ -1,16 +1,16 @@
-import Database from 'better-sqlite3'
-import { drizzle } from 'drizzle-orm/better-sqlite3'
-import * as schema from '../db/schema'
-import { mkdirSync } from 'node:fs'
+import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import * as schema from "../db/schema";
+import { mkdirSync } from "node:fs";
 
-const dbPath = process.env.DATABASE_URL ?? 'data/spool-keeper.db'
-mkdirSync(dbPath.replace(/\/[^/]+$/, ''), { recursive: true })
+const dbPath = process.env.DATABASE_URL ?? "data/spool-keeper.db";
+mkdirSync(dbPath.replace(/\/[^/]+$/, ""), { recursive: true });
 
-const sqlite = new Database(dbPath)
-sqlite.pragma('journal_mode = WAL')
-sqlite.pragma('foreign_keys = ON')
+const sqlite = new Database(dbPath);
+sqlite.pragma("journal_mode = WAL");
+sqlite.pragma("foreign_keys = ON");
 
-// Ensure schema is up to date — idempotent, safe to run on every startup
+// Ensure schema is up to date idempotent, safe to run on every startup
 sqlite.exec(`
   CREATE TABLE IF NOT EXISTS manufacturers (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -64,7 +64,7 @@ sqlite.exec(`
     drying_started_at TEXT,
     drying_finished_at TEXT
   );
-`)
+`);
 
 // Add columns that may be missing on older deployments (errors = already exists, safe to ignore)
 for (const stmt of [
@@ -72,7 +72,11 @@ for (const stmt of [
   `ALTER TABLE filaments ADD COLUMN color_id INTEGER`,
   `ALTER TABLE filaments ADD COLUMN ean TEXT`,
 ]) {
-  try { sqlite.exec(stmt) } catch { /* already exists */ }
+  try {
+    sqlite.exec(stmt);
+  } catch {
+    /* already exists */
+  }
 }
 
-export const db = drizzle(sqlite, { schema })
+export const db = drizzle(sqlite, { schema });

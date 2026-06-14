@@ -1,15 +1,15 @@
 export default defineEventHandler(async (event) => {
-  const path = getRequestURL(event).pathname
+  const path = getRequestURL(event).pathname;
 
-  if (path.startsWith('/auth/')) return
-  if (path === '/login') return
+  if (path.startsWith("/auth/")) return;
+  if (path === "/login") return;
 
-  const session = await getUserSession(event)
+  const session = await getUserSession(event);
 
   if (!session?.user) {
-    if (path.startsWith('/api/')) {
-      throw createError({ statusCode: 401, message: 'Unauthorized' })
+    if (path.startsWith("/api/")) {
+      throw createError({ statusCode: 401, message: "Unauthorized" });
     }
-    return sendRedirect(event, '/login')
+    return sendRedirect(event, "/login");
   }
-})
+});
