@@ -29,8 +29,7 @@ pnpm install
 pnpm dev:demo
 ```
 
-Demo mode enables a development-only login button for `demo@spool-keeper.local`
-and seeds example data on first login.
+Demo mode has a local-only login button (using `demo@spool-keeper.local`) and seeds example data on first login.
 
 ### Google OAuth
 
