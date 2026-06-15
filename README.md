@@ -24,13 +24,13 @@ print temperatures, and QR labels.
 
 ## Stack
 
-| Stack | Details |
-| --- | --- |
-| [Nuxt 4](https://nuxt.com/) | ([Vue 3](https://vuejs.org/) + [Nitro](https://nitro.build/)) full-stack framework |
-| [SQLite](https://sqlite.org/) + [Drizzle ORM](https://orm.drizzle.team/) | file-based database, no server |
-| [Google OAuth](https://developers.google.com/identity/protocols/oauth2) | via [nuxt-auth-utils](https://github.com/atinux/nuxt-auth-utils) |
-| [Tailwind CSS v4](https://tailwindcss.com/) + [Nuxt UI](https://ui.nuxt.com/) | interface styling and components |
-| [Docker](https://www.docker.com/) + [Caddy](https://caddyserver.com/) | on a VPS |
+| Stack                                                                         | Details                                                                            |
+| ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [Nuxt 4](https://nuxt.com/)                                                   | ([Vue 3](https://vuejs.org/) + [Nitro](https://nitro.build/)) full-stack framework |
+| [SQLite](https://sqlite.org/) + [Drizzle ORM](https://orm.drizzle.team/)      | file-based database, no server                                                     |
+| [Google OAuth](https://developers.google.com/identity/protocols/oauth2)       | via [nuxt-auth-utils](https://github.com/atinux/nuxt-auth-utils)                   |
+| [Tailwind CSS v4](https://tailwindcss.com/) + [Nuxt UI](https://ui.nuxt.com/) | interface styling and components                                                   |
+| [Docker](https://www.docker.com/) + [Caddy](https://caddyserver.com/)         | on a VPS                                                                           |
 
 ## Local Development
 
@@ -47,6 +47,7 @@ Resolve dependencies & run in demo mode:
 pnpm install
 pnpm dev:demo
 ```
+
 Demo mode has a local-only login button (using `demo@spool-keeper.local`) and seeds example data on first login.
 
 ```bash
