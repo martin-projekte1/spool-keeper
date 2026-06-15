@@ -23,15 +23,14 @@ const emit = defineEmits<{
   "open-scanner": [];
 }>();
 
-const { colors, features, manufacturerOptions, materialOptions, colorOptions } =
-  useFilamentLookups();
-
-const selectedColorHex = computed(() => {
-  if (!props.modelValue.colorId || !colors.value) return null;
-  return (
-    colors.value?.find((c) => c.id === props.modelValue.colorId)?.hex ?? null
-  );
-});
+const {
+  colors,
+  features,
+  refreshColors,
+  manufacturerOptions,
+  materialOptions,
+  colorOptions,
+} = useFilamentLookups();
 </script>
 
 <template>
@@ -82,21 +81,12 @@ const selectedColorHex = computed(() => {
       </UFormField>
     </div>
 
-    <UFormField label="Color">
-      <div class="flex gap-2 items-center">
-        <USelect
-          v-model="modelValue.colorId"
-          :items="colorOptions"
-          class="flex-1"
-          placeholder="Select color…"
-        />
-        <span
-          v-if="selectedColorHex"
-          :style="{ background: selectedColorHex }"
-          class="size-9 rounded border border-default shrink-0"
-        />
-      </div>
-    </UFormField>
+    <FilamentColorField
+      v-model="modelValue.colorId"
+      :color-options="colorOptions"
+      :colors="colors"
+      :refresh-colors="refreshColors"
+    />
 
     <UFormField label="Features">
       <div class="flex flex-wrap gap-3">

@@ -3,7 +3,8 @@ import type { ColorLookupItem, LookupItem } from "~/types/filament";
 export function useFilamentLookups() {
   const { data: manufacturers } = useFetch<LookupItem[]>("/api/manufacturers");
   const { data: materials } = useFetch<LookupItem[]>("/api/materials");
-  const { data: colors } = useFetch<ColorLookupItem[]>("/api/colors");
+  const { data: colors, refresh: refreshColors } =
+    useFetch<ColorLookupItem[]>("/api/colors");
   const { data: features } = useFetch<LookupItem[]>("/api/features");
 
   const manufacturerOptions = computed(() =>
@@ -27,6 +28,7 @@ export function useFilamentLookups() {
     materials,
     colors,
     features,
+    refreshColors,
     manufacturerOptions,
     materialOptions,
     colorOptions,
