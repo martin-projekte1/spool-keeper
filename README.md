@@ -15,14 +15,24 @@ Track spools, remaining weight, print temperatures, and generate QR labels.
 
 ## Local Development
 
+### Prerequisites
+
+- Install [pnpm](https://pnpm.io/installation) & [node](https://nodejs.org/en/download).
+- Recommended: Node.js 24+, pnpm 11+
+
+### Demo Mode
+
+Resolve dependencies & run in demo mode:
+
 ```bash
-# Recommended: Node.js 24+, pnpm 11+
 pnpm install
 pnpm dev:demo           # local demo mode, no Google OAuth required
 ```
 
 Demo mode enables a development-only login button for `demo@spool-keeper.local`
 and seeds example data on first login.
+
+### Google OAuth
 
 For development with real Google OAuth:
 
