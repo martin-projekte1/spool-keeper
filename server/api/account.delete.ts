@@ -1,4 +1,5 @@
 import { clearUserData } from "#server/utils/ownership";
+import { clearAuthSession } from "#server/utils/auth-session";
 
 defineRouteMeta({
   openAPI: {
@@ -21,7 +22,7 @@ export default defineEventHandler(async (event) => {
     clearUserData(tx, userId);
   });
 
-  await clearUserSession(event);
+  await clearAuthSession(event);
 
   return { ok: true };
 });

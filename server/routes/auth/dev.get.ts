@@ -1,5 +1,6 @@
 import { manufacturers } from "#server/db/schema";
 import { seedForUser } from "#server/utils/seed";
+import { setAuthSession } from "#server/utils/auth-session";
 import { eq } from "drizzle-orm";
 
 const demoUser = {
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, message: "Not found" });
   }
 
-  await setUserSession(event, { user: demoUser });
+  await setAuthSession(event, { user: demoUser });
 
   const existing = await db
     .select()
