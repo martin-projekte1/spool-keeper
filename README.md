@@ -26,7 +26,7 @@ Resolve dependencies & run in demo mode:
 
 ```bash
 pnpm install
-pnpm dev:demo           # local demo mode, no Google OAuth required
+pnpm dev:demo
 ```
 
 Demo mode enables a development-only login button for `demo@spool-keeper.local`
