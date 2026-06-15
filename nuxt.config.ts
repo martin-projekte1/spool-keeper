@@ -1,3 +1,7 @@
+const devAuthBypass =
+  process.env.NODE_ENV !== "production" &&
+  process.env.NUXT_DEV_AUTH_BYPASS === "true";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -158,11 +162,16 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    devAuthBypass,
     public: {
       siteUrl: process.env.NUXT_SITE_URL || "https://www.spoolkeeper.site",
+      devAuthBypass,
     },
     session: {
       name: "spool-keeper-session",
+      password: devAuthBypass
+        ? "spool-keeper-local-dev-session-password"
+        : undefined,
       cookie: {
         sameSite: "lax",
         secure: true,

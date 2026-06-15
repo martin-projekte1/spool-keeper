@@ -2,11 +2,18 @@
 definePageMeta({ layout: false });
 
 const route = useRoute();
+const config = useRuntimeConfig();
+
 const error = computed(() => route.query.error);
+const isDevAuthBypass = computed(() => config.public.devAuthBypass);
 
 function signIn() {
   // Forces full navigation - avoids the in-app browser overlay in iOS PWA mode
   window.location.assign("/auth/google");
+}
+
+function signInDemo() {
+  window.location.assign("/auth/dev");
 }
 </script>
 
@@ -52,14 +59,27 @@ function signIn() {
         </p>
       </div>
 
-      <a class="block" href="/auth/google">
+      <UButton
+        v-if="isDevAuthBypass"
+        block
+        class="font-semibold shadow-md"
+        color="primary"
+        icon="i-lucide-user"
+        size="xl"
+        variant="solid"
+        @click="signInDemo"
+      >
+        Continue as Demo User
+      </UButton>
+
+      <a class="block" href="/auth/google" @click.prevent="signIn">
         <UButton
           block
           class="font-semibold shadow-md"
-          color="primary"
+          :color="isDevAuthBypass ? 'neutral' : 'primary'"
           icon="i-lucide-log-in"
           size="xl"
-          variant="solid"
+          :variant="isDevAuthBypass ? 'outline' : 'solid'"
         >
           Sign in with Google
         </UButton>

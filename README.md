@@ -17,7 +17,16 @@ Track spools, remaining weight, print temperatures, and generate QR labels.
 
 ```bash
 # Recommended: Node.js 24+, pnpm 11+
-cp .env.example .env   # fill in Google OAuth credentials & session password
 pnpm install
+pnpm dev:demo           # local demo mode, no Google OAuth required
+```
+
+Demo mode enables a development-only login button for `demo@spool-keeper.local`
+and seeds example data on first login.
+
+For development with real Google OAuth:
+
+```bash
+cp .env.example .env   # fill in Google OAuth credentials & session password
 pnpm dev
 ```

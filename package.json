@@ -6,6 +6,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:demo": "NUXT_DEV_AUTH_BYPASS=true nuxt dev",
     "dev --host": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
