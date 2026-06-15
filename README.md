@@ -28,8 +28,11 @@ Resolve dependencies & run in demo mode:
 pnpm install
 pnpm dev:demo
 ```
-
 Demo mode has a local-only login button (using `demo@spool-keeper.local`) and seeds example data on first login.
+
+```bash
+pnpm dev:demo --host    # optional: expose demo mode on the local network
+```
 
 ### Google OAuth
 

@@ -174,7 +174,7 @@ export default defineNuxtConfig({
         : undefined,
       cookie: {
         sameSite: "lax",
-        secure: true,
+        secure: process.env.NODE_ENV === "production",
       },
     },
   },

@@ -49,7 +49,7 @@ function signInDemo() {
         class="p-3 rounded-xl bg-red-500/10 border border-red-500/20"
       >
         <p
-          v-if="error === 'unauthorized'"
+          v-if="error === 'unauthorized' && !isDevAuthBypass"
           class="text-red-600 dark:text-red-400 text-sm font-medium"
         >
           Access denied. This Google account is not authorized.
@@ -72,14 +72,19 @@ function signInDemo() {
         Continue as Demo User
       </UButton>
 
-      <a class="block" href="/auth/google" @click.prevent="signIn">
+      <a
+        v-if="!isDevAuthBypass"
+        class="block"
+        href="/auth/google"
+        @click.prevent="signIn"
+      >
         <UButton
           block
           class="font-semibold shadow-md"
-          :color="isDevAuthBypass ? 'neutral' : 'primary'"
+          color="primary"
           icon="i-lucide-log-in"
           size="xl"
-          :variant="isDevAuthBypass ? 'outline' : 'solid'"
+          variant="solid"
         >
           Sign in with Google
         </UButton>
