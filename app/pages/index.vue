@@ -126,7 +126,7 @@ const { send } = useRealtimeUpdates((event, value) => {
   if (event === "qr:scanned" && value && /^\d+$/.test(value)) {
     const t = toast.add({
       title: "QR Code Scanned",
-      description: "Another device scanned a spool. Tap to open it.",
+      description: "Another device scanned a filament. Tap to open it.",
       icon: "i-lucide-scan-qr-code",
       duration: 8000,
       onClick: () => {
